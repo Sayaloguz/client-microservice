@@ -6,18 +6,16 @@ import lombok.*;
 
 @Getter
 @Setter
-@RequiredArgsConstructor
-
-@DynamoDBDocument
+@NoArgsConstructor
+@AllArgsConstructor
 @DynamoDBTable(tableName = "MainTable")
 public class MainTable {
 
-    @DynamoDBHashKey(attributeName = "PK") // Referenciará a "cifNifNie"
-    @JsonProperty("PK") // Necesario junto con DYnamoDBDocument para mapear correctamente
-    private String PK;
+    @DynamoDBHashKey(attributeName = "PK")
+    private String pk;
 
-    @DynamoDBRangeKey(attributeName = "SK") // Referenciará a "email"
-    private String SK;
+    @DynamoDBRangeKey(attributeName = "SK")
+    private String sk;
 
     @DynamoDBAttribute(attributeName = "id")
     private String id;
@@ -25,10 +23,11 @@ public class MainTable {
     @DynamoDBAttribute(attributeName = "status")
     private String status;
 
-    @DynamoDBAttribute(attributeName = "gIndex2Pk")
-    private String gIndex2Pk;
+    @DynamoDBIndexHashKey(attributeName = "gIndex2Pk", globalSecondaryIndexName = "gIndex2Pk")
+    protected String gIndex2Pk;
 
     @DynamoDBAttribute(attributeName = "createTime")
     private String createTime; // String o LocalDateTime?
+
 
 }

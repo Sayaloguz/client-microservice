@@ -20,16 +20,12 @@ public class ClientRepositoryImpl implements ClientRepository {
 
     private final DynamoDBMapper dynamoDBMapper;
 
-    // Esto debería de recibir DTO y no Client ??????
     @Override
     public Client create(Client client) {
         dynamoDBMapper.save(client);
         return client;
     }
-
     // Controller (EPs con DTO) <-> Servicio  <-> Repositorio con llamadas "puras a la DB"
-
-
 
     // A partir de aquí son placeholders
     @Override

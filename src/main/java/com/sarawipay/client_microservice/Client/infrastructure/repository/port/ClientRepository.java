@@ -9,7 +9,6 @@ import java.util.Optional;
 @Repository
 public interface ClientRepository {
 
-    // Dto??? O Client???
     Client create(Client client);
 
     Client findById(String id);
