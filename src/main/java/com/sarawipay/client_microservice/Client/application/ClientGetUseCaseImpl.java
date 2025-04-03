@@ -10,6 +10,7 @@ import lombok.RequiredArgsConstructor;
 import lombok.Setter;
 import org.springframework.stereotype.Service;
 
+import java.util.Collections;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -35,6 +36,7 @@ public class ClientGetUseCaseImpl implements ClientGetUseCase {
         return clientOutputDTOList;
     }
 
+
     @Override
     public List<ClientOutputDTO> getByEmail(String email) {
 
@@ -46,5 +48,16 @@ public class ClientGetUseCaseImpl implements ClientGetUseCase {
                 .collect(Collectors.toList());
 
         return clientOutputDTOList;
+    }
+
+
+    @Override
+    public ClientOutputDTO getById(String id) {
+        Client client = clientRepository.findById(id);
+
+        // Transformación a DTO
+        ClientOutputDTO res = clientMappers.clientToOutput(client);
+
+        return res;
     }
 }

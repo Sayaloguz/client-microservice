@@ -55,6 +55,7 @@ public class ClientRepositoryImpl implements ClientRepository {
         return res;
     }
 
+
     @Override
     public List<Client> findByEmail(String email) {
         // Vamos a suponer que pueden haber varios clientes con el mismo correo
@@ -85,13 +86,38 @@ public class ClientRepositoryImpl implements ClientRepository {
     }
 
 
-    // A partir de aquí son placeholders
-
     @Override
     public Client findById(String id) {
-        return null;
+        // REVISAR: Dado que el id es único, no necesitamos filtrar por el PK, pero quizás sería bueno hacerlo
+
+        String pkGsi = "gIndex2Pk"; // PK de GSI
+
+        Map<String, String> expressionAttributeNames = new HashMap<>();
+        expressionAttributeNames.put("#pkAttr", pkGsi);
+        expressionAttributeNames.put("#idAttr", "id");
+
+        Map<String, AttributeValue> expressionAtributeValues = new HashMap<>();
+        expressionAtributeValues.put(":pkVal", new AttributeValue().withS("entityClient")); // Solo buscamos clientes
+        expressionAtributeValues.put(":id", new AttributeValue().withS(id));
+
+
+        DynamoDBQueryExpression<Client> query = new DynamoDBQueryExpression<Client>()
+                .withIndexName("gIndex2Pk")
+                .withConsistentRead(false)
+                .withKeyConditionExpression("#pkAttr = :pkVal")
+                .withFilterExpression("#idAttr = :id")
+                // Asignación de nombres y valores
+                .withExpressionAttributeNames(expressionAttributeNames)
+                .withExpressionAttributeValues(expressionAtributeValues);
+
+        List<Client> res = dynamoDBMapper.query(Client.class, query);
+
+        return res.get(0);
     }
 
+
+
+    // A partir de aquí son placeholders
 
     @Override
     public Optional<Client> merchantClient(Client client) {
