@@ -1,6 +1,8 @@
 package com.sarawipay.client_microservice.Client.infrastructure.repository.port;
 
 import com.sarawipay.client_microservice.Client.domain.Client;
+import com.sarawipay.client_microservice.Client.infrastructure.controller.DTO.input.ClientInputDTO;
+import com.sarawipay.client_microservice.Client.infrastructure.controller.DTO.output.ClientOutputDTO;
 import org.springframework.stereotype.Repository;
 
 import java.util.List;
@@ -16,6 +18,8 @@ public interface ClientRepository {
     List<Client> findByName(String name);
 
     List<Client> findByEmail(String email);
+
+    Client update(ClientInputDTO clientInputDTO, String pk, String sk);
 
     Optional<Client> merchantClient(Client client);
 }
