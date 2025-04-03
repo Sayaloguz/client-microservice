@@ -35,8 +35,14 @@ public class ClientAddUseCaseImpl implements ClientAddUseCase {
         client.setCreateTime(String.valueOf(new Date()));
         client.setGIndex2Pk("entityClient");
 
+        // Lo pasamos a minúsculas para el filtrado posterior
+        client.setName(clientInputDTO.getName().toLowerCase());
+        client.setSurname(clientInputDTO.getSurname().toLowerCase());
+
         clientRepository.create(client);
 
         return client;
     }
+
+
 }
