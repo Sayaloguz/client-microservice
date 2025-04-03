@@ -20,7 +20,8 @@ public class ClientInputDTO {
     @Pattern(regexp = "^[0-9]{9}$", message = "Teléfono inválido")
     private String phone;
 
-    @NotBlank(message = "El email es obligatorio")
+    // Esto creo que no funciona??
+    // @NotBlank(message = "El email es obligatorio")
     @Pattern(
             regexp = "^[a-zA-Z0-9_+&*-]+(?:\\.[a-zA-Z0-9_+&*-]+)*@(?:[a-zA-Z0-9-]+\\.)+[a-zA-Z]{2,7}$",
             message = "El email debe ser válido (ej: usuario@dominio.com)"

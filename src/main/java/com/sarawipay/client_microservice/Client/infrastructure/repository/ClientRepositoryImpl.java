@@ -1,6 +1,5 @@
 package com.sarawipay.client_microservice.Client.infrastructure.repository;
 
-import com.amazonaws.services.dynamodbv2.AmazonDynamoDB;
 import com.amazonaws.services.dynamodbv2.datamodeling.DynamoDBMapper;
 import com.sarawipay.client_microservice.Client.domain.Client;
 import com.sarawipay.client_microservice.Client.infrastructure.repository.port.ClientRepository;
@@ -14,7 +13,6 @@ import java.util.*;
 @Getter
 @Setter
 @RequiredArgsConstructor
-
 @Repository
 public class ClientRepositoryImpl implements ClientRepository {
 
@@ -25,7 +23,6 @@ public class ClientRepositoryImpl implements ClientRepository {
         dynamoDBMapper.save(client);
         return client;
     }
-    // Controller (EPs con DTO) <-> Servicio  <-> Repositorio con llamadas "puras a la DB"
 
     // A partir de aquí son placeholders
     @Override

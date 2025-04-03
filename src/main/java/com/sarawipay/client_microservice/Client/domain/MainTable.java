@@ -1,7 +1,6 @@
 package com.sarawipay.client_microservice.Client.domain;
 
 import com.amazonaws.services.dynamodbv2.datamodeling.*;
-import com.fasterxml.jackson.annotation.JsonProperty;
 import lombok.*;
 
 @Getter
@@ -27,7 +26,5 @@ public class MainTable {
     protected String gIndex2Pk;
 
     @DynamoDBAttribute(attributeName = "createTime")
-    private String createTime; // String o LocalDateTime?
-
-
+    private String createTime;
 }
