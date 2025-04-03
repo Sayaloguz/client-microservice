@@ -55,6 +55,35 @@ public class ClientRepositoryImpl implements ClientRepository {
         return res;
     }
 
+    @Override
+    public List<Client> findByEmail(String email) {
+        // Vamos a suponer que pueden haber varios clientes con el mismo correo
+
+        String pkGsi = "gIndex2Pk"; // PK de GSI
+
+        Map<String, String> expressionAttributeNames = new HashMap<>();
+        expressionAttributeNames.put("#pkAttr", pkGsi);
+        expressionAttributeNames.put("#emailAttr", "email");
+
+        Map<String, AttributeValue> expressionAtributeValues = new HashMap<>();
+        expressionAtributeValues.put(":pkVal", new AttributeValue().withS("entityClient")); // Solo buscamos clientes
+        expressionAtributeValues.put(":email", new AttributeValue().withS(email));
+
+
+        DynamoDBQueryExpression<Client> query = new DynamoDBQueryExpression<Client>()
+                .withIndexName("gIndex2Pk")
+                .withConsistentRead(false)
+                .withKeyConditionExpression("#pkAttr = :pkVal")
+                .withFilterExpression("#emailAttr = :email")
+                // Asignación de nombres y valores
+                .withExpressionAttributeNames(expressionAttributeNames)
+                .withExpressionAttributeValues(expressionAtributeValues);
+
+        List<Client> res = dynamoDBMapper.query(Client.class, query);
+
+        return res;
+    }
+
 
     // A partir de aquí son placeholders
 
@@ -63,11 +92,6 @@ public class ClientRepositoryImpl implements ClientRepository {
         return null;
     }
 
-
-    @Override
-    public List<Client> findByEmail(String email) {
-        return Collections.emptyList();
-    }
 
     @Override
     public Optional<Client> merchantClient(Client client) {

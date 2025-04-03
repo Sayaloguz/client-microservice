@@ -9,4 +9,5 @@ import java.util.List;
 public interface ClientGetUseCase {
 
     List<ClientOutputDTO> getByName(String name);
+    List<ClientOutputDTO> getByEmail(String email);
 }

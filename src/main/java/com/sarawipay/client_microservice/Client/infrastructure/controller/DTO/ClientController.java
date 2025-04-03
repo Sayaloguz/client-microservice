@@ -29,4 +29,8 @@ public class ClientController {
         return clientGetUseCase.getByName(name);
     }
 
+    @GetMapping("getByEmail/{email}")
+    public List<ClientOutputDTO> getByEmail(@PathVariable String email) {
+        return clientGetUseCase.getByEmail(email);
+    }
 }
