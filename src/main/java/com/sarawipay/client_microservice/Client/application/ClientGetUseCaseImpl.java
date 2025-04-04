@@ -2,8 +2,10 @@ package com.sarawipay.client_microservice.Client.application;
 
 import com.sarawipay.client_microservice.Client.application.port.ClientGetUseCase;
 import com.sarawipay.client_microservice.Client.domain.Client;
+import com.sarawipay.client_microservice.Client.domain.MerchantClientFeign;
 import com.sarawipay.client_microservice.Client.domain.mappers.ClientMappers;
 import com.sarawipay.client_microservice.Client.infrastructure.controller.DTO.output.ClientOutputDTO;
+import com.sarawipay.client_microservice.Client.infrastructure.controller.DTO.output.MerchantResponseDTO;
 import com.sarawipay.client_microservice.Client.infrastructure.repository.port.ClientRepository;
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;
@@ -22,6 +24,7 @@ public class ClientGetUseCaseImpl implements ClientGetUseCase {
 
     private final ClientRepository clientRepository;
     private final ClientMappers clientMappers;
+    private final MerchantClientFeign merchantClient;
 
     @Override
     public List<ClientOutputDTO> getByName(String name) {
@@ -59,5 +62,13 @@ public class ClientGetUseCaseImpl implements ClientGetUseCase {
         ClientOutputDTO res = clientMappers.clientToOutput(client);
 
         return res;
+    }
+
+
+    @Override
+    public MerchantResponseDTO getMerchantById(String id) {
+
+        MerchantResponseDTO response = merchantClient.findById(id);
+        return response;
     }
 }

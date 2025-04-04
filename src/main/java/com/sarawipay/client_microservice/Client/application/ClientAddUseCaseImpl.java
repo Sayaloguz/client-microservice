@@ -6,9 +6,7 @@ import com.sarawipay.client_microservice.Client.domain.Client;
 import com.sarawipay.client_microservice.Client.domain.mappers.ClientMappers;
 import com.sarawipay.client_microservice.Client.infrastructure.controller.DTO.input.ClientInputDTO;
 import com.sarawipay.client_microservice.Client.infrastructure.repository.port.ClientRepository;
-import lombok.Getter;
-import lombok.RequiredArgsConstructor;
-import lombok.Setter;
+import lombok.*;
 import org.springframework.stereotype.Service;
 
 import java.util.Date;
@@ -16,7 +14,7 @@ import java.util.UUID;
 
 @Getter
 @Setter
-@RequiredArgsConstructor
+@AllArgsConstructor
 @Service
 public class ClientAddUseCaseImpl implements ClientAddUseCase {
 
@@ -24,9 +22,9 @@ public class ClientAddUseCaseImpl implements ClientAddUseCase {
     private final ClientMappers clientMappers;
 
     @Override
-    public Client addClient(ClientInputDTO clientInputDTO) {
-        Client client = clientMappers.inputToClient(clientInputDTO);
+    public ClientModel addClient(ClientModel clientModel) {
 
+        // Client client = clientMappers.inputToClient(clientInputDTO);
 
         String id = UUID.randomUUID().toString();
 
@@ -37,13 +35,10 @@ public class ClientAddUseCaseImpl implements ClientAddUseCase {
         client.setCreateTime(String.valueOf(new Date()));
         client.setGIndex2Pk("entityClient");
 
-
         clientRepository.create(client);
 
-
         return client;
+
     }
-
-
 
 }

@@ -4,5 +4,7 @@ import com.sarawipay.client_microservice.Client.infrastructure.controller.DTO.in
 import com.sarawipay.client_microservice.Client.infrastructure.controller.DTO.output.ClientOutputDTO;
 
 public interface ClientUpdateUseCase {
+
     ClientOutputDTO update(ClientInputDTO clientInputDTO, String pk, String sk);
+
 }
