@@ -123,10 +123,6 @@ public class ClientRepositoryImpl implements ClientRepository {
         Client existingClient = dynamoDBMapper.load(Client.class, pk, sk);
 
         if (existingClient != null) {
-            existingClient.setId(existingClient.getId());
-            existingClient.setStatus(existingClient.getStatus());
-            existingClient.setGIndex2Pk(existingClient.getGIndex2Pk());
-            existingClient.setCreateTime(existingClient.getCreateTime());
 
             existingClient.setCifNifNie(clientInputDTO.getCifNifNie());
             existingClient.setName(clientInputDTO.getName());
@@ -135,46 +131,11 @@ public class ClientRepositoryImpl implements ClientRepository {
             existingClient.setEmail(clientInputDTO.getEmail());
 
             dynamoDBMapper.save(existingClient);
-        }
 
+        }
 
         return existingClient;
     }
-
-    /*
-    @Override
-    public Client update(Client client, String pk, String sk) {
-
-
-        String pkGsi = "gIndex2Pk"; // PK de GSI
-
-        Map<String, String> expressionAttributeNames = new HashMap<>();
-        expressionAttributeNames.put("#pkAttr", pkGsi);
-        expressionAttributeNames.put("#idAttr", "id");
-
-        Map<String, AttributeValue> expressionAtributeValues = new HashMap<>();
-        expressionAtributeValues.put(":pkVal", new AttributeValue().withS("entityClient")); // Solo buscamos clientes
-        expressionAtributeValues.put(":id", new AttributeValue().withS(id));
-
-
-        DynamoDBQueryExpression<Client> query = new DynamoDBQueryExpression<Client>()
-                .withIndexName("gIndex2Pk")
-                .withConsistentRead(false)
-                .withKeyConditionExpression("#pkAttr = :pkVal")
-                .withFilterExpression("#idAttr = :id")
-                // Asignación de nombres y valores
-                .withExpressionAttributeNames(expressionAttributeNames)
-                .withExpressionAttributeValues(expressionAtributeValues);
-
-        List<Client> res = dynamoDBMapper.query(Client.class, query);
-
-        //
-
-        dynamoDBMapper.save(client);
-
-        return client;
-    }
-    */
 
 
     // A partir de aquí son placeholders

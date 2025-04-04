@@ -1,10 +1,13 @@
 package com.sarawipay.client_microservice.Client.infrastructure.controller.DTO.input;
+
 import lombok.*;
+
 import javax.validation.constraints.*;
 
 @Getter
 @Setter
-@RequiredArgsConstructor
+@NoArgsConstructor
+@AllArgsConstructor
 public class ClientInputDTO {
     @NotBlank(message = "El documento de identidad es obligatorio")
     private String cifNifNie;
@@ -23,4 +26,15 @@ public class ClientInputDTO {
             message = "El email es obligatorio y debe ser válido (ej: usuario@dominio.com)"
     )
     private String email;
+
+
+    public void setName(String name) {
+        this.name = name.toLowerCase();
+    }
+
+    // No usamos este setter, pero es por coherencia
+    public void setSurname(String surname) {
+        this.surname = surname.toLowerCase();
+    }
+
 }
