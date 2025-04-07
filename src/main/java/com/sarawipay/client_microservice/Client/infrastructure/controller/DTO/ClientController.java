@@ -36,7 +36,16 @@ public class ClientController {
 
     @GetMapping("/getByName/{name}")
     public List<ClientOutputDTO> getByName(@PathVariable String name) {
-        return clientGetUseCase.getByName(name);
+
+        List<ClientGenericModel> res = clientGetUseCase.getByName(name);
+
+        // Transformación a DTO
+        List<ClientOutputDTO> clientOutputDTOList = res.stream()
+                .map(clientMappers::modelToOutput)
+                .collect(Collectors.toList());
+
+        return clientOutputDTOList;
+
     }
 
     @GetMapping("getByEmail/{email}")

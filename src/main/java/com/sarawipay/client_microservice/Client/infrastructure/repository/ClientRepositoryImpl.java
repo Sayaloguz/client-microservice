@@ -36,7 +36,9 @@ public class ClientRepositoryImpl implements ClientRepository {
     }
 
     @Override
-    public List<Client> findByName(String name) {
+    //public List<Client> findByName(String name) {
+    public List<ClientGenericModel> findByName(String name) {
+
         String pkGsi = "gIndex2Pk"; // PK de GSI
         String lwrCaseName = name.toLowerCase(); // Comparación en minúsculas
 
@@ -58,9 +60,14 @@ public class ClientRepositoryImpl implements ClientRepository {
                 .withExpressionAttributeNames(expressionAttributeNames)
                 .withExpressionAttributeValues(expressionAtributeValues);
 
-        List<Client> res = dynamoDBMapper.query(Client.class, query);
+        List<Client> entities = dynamoDBMapper.query(Client.class, query);
+
+        List<ClientGenericModel> res = entities.stream()
+                .map(clientMappers::clientToModel)
+                .collect(Collectors.toList());
 
         return res;
+
     }
 
 

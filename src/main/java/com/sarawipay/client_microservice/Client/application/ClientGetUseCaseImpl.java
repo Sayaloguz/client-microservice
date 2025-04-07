@@ -24,16 +24,12 @@ public class ClientGetUseCaseImpl implements ClientGetUseCase {
     private final ClientMappers clientMappers;
 
     @Override
-    public List<ClientOutputDTO> getByName(String name) {
+    //public List<ClientOutputDTO> getByName(String name) {
+    public List<ClientGenericModel> getByName(String name) {
 
-        List<Client> res = clientRepository.findByName(name);
+        List<ClientGenericModel> res = clientRepository.findByName(name);
 
-        // Transformación a DTO
-        List<ClientOutputDTO> clientOutputDTOList = res.stream()
-                .map(clientMappers::clientToOutput)
-                .collect(Collectors.toList());
-
-        return clientOutputDTOList;
+        return res;
     }
 
 
@@ -49,11 +45,13 @@ public class ClientGetUseCaseImpl implements ClientGetUseCase {
 
     @Override
     public ClientOutputDTO getById(String id) {
+
         Client client = clientRepository.findById(id);
 
         // Transformación a DTO
         ClientOutputDTO res = clientMappers.clientToOutput(client);
 
         return res;
+
     }
 }
