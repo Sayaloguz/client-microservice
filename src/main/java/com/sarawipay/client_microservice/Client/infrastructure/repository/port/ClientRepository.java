@@ -14,7 +14,7 @@ public interface ClientRepository {
 
     //Client create(Client client);
     void create(ClientGenericModel clientGenericModel);
-    Client findById(String id);
+    ClientGenericModel findById(String id);
 
     //List<Client> findByName(String name);
     List<ClientGenericModel> findByName(String name);

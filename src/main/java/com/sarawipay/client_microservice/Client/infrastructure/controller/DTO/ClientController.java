@@ -6,10 +6,13 @@ import com.sarawipay.client_microservice.Client.application.port.ClientGetUseCas
 import com.sarawipay.client_microservice.Client.application.port.ClientUpdateUseCase;
 import com.sarawipay.client_microservice.Client.domain.Client;
 import com.sarawipay.client_microservice.Client.domain.mappers.ClientMappers;
+import com.sarawipay.client_microservice.Client.infrastructure.controller.DTO.input.ClientIdDTO;
 import com.sarawipay.client_microservice.Client.infrastructure.controller.DTO.input.ClientInputDTO;
 import com.sarawipay.client_microservice.Client.infrastructure.controller.DTO.input.ClientUpdateRequestDTO;
 import com.sarawipay.client_microservice.Client.infrastructure.controller.DTO.output.ClientOutputDTO;
+import com.sarawipay.client_microservice.Client.infrastructure.controller.DTO.output.FullClientOutputDTO;
 import lombok.RequiredArgsConstructor;
+import org.springframework.validation.Errors;
 import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
@@ -64,8 +67,22 @@ public class ClientController {
     }
 
     @GetMapping("getById/{id}")
-    public ClientOutputDTO getById(@PathVariable String id) {
-        return clientGetUseCase.getById(id);
+    public FullClientOutputDTO getById(@PathVariable String id) {
+
+        return clientMappers.modelToFullOutput(clientGetUseCase.getById(id));
+
+    }
+
+    @GetMapping("getById/{id}/{simpleOutput}")
+    public ClientIdDTO getByIdSimple(@PathVariable String id, @PathVariable String simpleOutput) {
+
+
+        if (simpleOutput.equalsIgnoreCase("simpleOutput")) {
+            return clientMappers.modelToIdDTO(clientGetUseCase.getById(id));
+        } else {
+            throw new IllegalArgumentException("Valor inválido para simpleOutput");
+        }
+
     }
 
     @PutMapping("update")

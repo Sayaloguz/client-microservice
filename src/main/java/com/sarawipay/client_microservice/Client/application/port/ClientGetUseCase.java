@@ -15,6 +15,7 @@ public interface ClientGetUseCase {
     //List<ClientOutputDTO> getByEmail(String email);
     List<ClientGenericModel> getByEmail(String email);
 
-    ClientOutputDTO getById(String id);
+    //ClientOutputDTO getById(String id);
+    ClientGenericModel getById(String id);
 
 }
