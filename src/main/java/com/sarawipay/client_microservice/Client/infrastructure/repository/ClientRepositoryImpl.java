@@ -26,6 +26,7 @@ public class ClientRepositoryImpl implements ClientRepository {
     private final DynamoDBMapper dynamoDBMapper;
     private final ClientMappers clientMappers;
 
+
     @Override
     public void create(ClientGenericModel model) {
 
@@ -35,8 +36,8 @@ public class ClientRepositoryImpl implements ClientRepository {
 
     }
 
+
     @Override
-    //public List<Client> findByName(String name) {
     public List<ClientGenericModel> findByName(String name) {
 
         String pkGsi = "gIndex2Pk"; // PK de GSI
@@ -72,7 +73,6 @@ public class ClientRepositoryImpl implements ClientRepository {
 
 
     @Override
-    //public List<Client> findByEmail(String email) {
     public List<ClientGenericModel> findByEmail(String email) {
         // Vamos a suponer que pueden haber varios clientes con el mismo correo
 
@@ -104,9 +104,8 @@ public class ClientRepositoryImpl implements ClientRepository {
                 .map(clientMappers::clientToModel)
                 .collect(Collectors.toList());
 
-        //entities.stream().forEach(client -> {res.add(clientMappers.clientToModel(client));});
-
         return res;
+
     }
 
 
@@ -140,6 +139,7 @@ public class ClientRepositoryImpl implements ClientRepository {
 
     }
 
+
     @Override
     public void update(ClientGenericModel generic) {
 
@@ -153,6 +153,7 @@ public class ClientRepositoryImpl implements ClientRepository {
 
             dynamoDBMapper.save(existingClient);
         }
+
     }
 
 

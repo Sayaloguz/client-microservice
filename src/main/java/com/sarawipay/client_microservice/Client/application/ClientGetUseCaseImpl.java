@@ -23,34 +23,25 @@ public class ClientGetUseCaseImpl implements ClientGetUseCase {
     private final ClientRepository clientRepository;
     private final ClientMappers clientMappers;
 
+
     @Override
-    //public List<ClientOutputDTO> getByName(String name) {
     public List<ClientGenericModel> getByName(String name) {
 
-        List<ClientGenericModel> res = clientRepository.findByName(name);
+        return clientRepository.findByName(name);
 
-        return res;
     }
 
 
     @Override
     public List<ClientGenericModel> getByEmail(String email) {
 
-        List<ClientGenericModel> res = clientRepository.findByEmail(email);
-
-        return res;
+        return clientRepository.findByEmail(email);
 
     }
 
 
     @Override
     public ClientGenericModel getById(String id) {
-
-        //Client client = clientRepository.findById(id);
-
-        // Transformación a DTO
-        //ClientOutputDTO res = clientMappers.clientToOutput(client);
-
 
         return clientRepository.findById(id);
 

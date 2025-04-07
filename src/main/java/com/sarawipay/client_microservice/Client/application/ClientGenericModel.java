@@ -10,6 +10,7 @@ import lombok.Setter;
 @NoArgsConstructor
 @AllArgsConstructor
 public class ClientGenericModel {
+
     private String pk;
     private String sk;
     private String id;
@@ -21,4 +22,5 @@ public class ClientGenericModel {
     private String surname;
     private String phone;
     private String email;
+
 }

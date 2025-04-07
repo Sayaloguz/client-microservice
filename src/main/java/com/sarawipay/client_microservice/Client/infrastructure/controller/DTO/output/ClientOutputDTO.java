@@ -34,4 +34,14 @@ public class ClientOutputDTO {
 
         this.surname = sb.toString();
     }
+
+    @Getter
+    @Setter
+    @NoArgsConstructor
+    @AllArgsConstructor
+    public static class ClientIdDTO {
+
+        private String id;
+
+    }
 }

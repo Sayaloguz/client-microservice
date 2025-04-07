@@ -1,4 +1,4 @@
-package com.sarawipay.client_microservice.Client.infrastructure.controller.DTO.input;
+package com.sarawipay.client_microservice.Client.infrastructure.controller.DTO.output;
 
 import lombok.AllArgsConstructor;
 import lombok.Getter;

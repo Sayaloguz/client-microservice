@@ -21,7 +21,7 @@ public class ClientAddUseCaseImpl implements ClientAddUseCase {
     private final ClientRepository clientRepository;
     private final ClientMappers clientMappers;
 
-    public ClientGenericModel addClient (ClientGenericModel model) {
+    public void addClient (ClientGenericModel model) {
 
         // Agregamos los atributos que nos faltan para poder crear el nuevo cliente
 
@@ -34,30 +34,7 @@ public class ClientAddUseCaseImpl implements ClientAddUseCase {
         model.setGIndex2Pk("entityClient");
 
         clientRepository.create(model);
-        return model;
+
     }
-
-//    @Override
-//    public Client addClient(ClientInputDTO clientInputDTO) {
-//        Client client = clientMappers.inputToClient(clientInputDTO);
-//
-//
-//        String id = UUID.randomUUID().toString();
-//
-//        client.setId(id);
-//        client.setPk("client#" + id);
-//        client.setSk(UUID.randomUUID().toString()); // Previamente era "document#" + el cifNifNie, pero ese atributo es sensible a cambios
-//        client.setStatus("ACTIVE");
-//        client.setCreateTime(String.valueOf(new Date()));
-//        client.setGIndex2Pk("entityClient");
-//
-//
-//        clientRepository.create(client);
-//
-//
-//        return client;
-//    }
-
-
 
 }
