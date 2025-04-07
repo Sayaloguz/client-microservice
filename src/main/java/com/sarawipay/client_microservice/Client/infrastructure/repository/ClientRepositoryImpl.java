@@ -111,7 +111,7 @@ public class ClientRepositoryImpl implements ClientRepository {
 
 
     @Override
-    public Client findById(String id) {
+    public ClientGenericModel findById(String id) {
         // REVISAR: Dado que el id es único, no necesitamos filtrar por el PK, pero quizás sería bueno hacerlo
 
         String pkGsi = "gIndex2Pk"; // PK de GSI
@@ -136,7 +136,8 @@ public class ClientRepositoryImpl implements ClientRepository {
 
         List<Client> res = dynamoDBMapper.query(Client.class, query);
 
-        return res.get(0);
+        return clientMappers.clientToModel(res.get(0));
+
     }
 
     @Override

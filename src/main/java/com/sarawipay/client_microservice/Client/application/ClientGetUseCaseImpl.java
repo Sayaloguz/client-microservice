@@ -44,14 +44,15 @@ public class ClientGetUseCaseImpl implements ClientGetUseCase {
 
 
     @Override
-    public ClientOutputDTO getById(String id) {
+    public ClientGenericModel getById(String id) {
 
-        Client client = clientRepository.findById(id);
+        //Client client = clientRepository.findById(id);
 
         // Transformación a DTO
-        ClientOutputDTO res = clientMappers.clientToOutput(client);
+        //ClientOutputDTO res = clientMappers.clientToOutput(client);
 
-        return res;
+
+        return clientRepository.findById(id);
 
     }
 }
