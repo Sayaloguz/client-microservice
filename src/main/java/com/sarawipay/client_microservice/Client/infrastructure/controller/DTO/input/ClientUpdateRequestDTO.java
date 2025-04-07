@@ -7,7 +7,11 @@ import lombok.*;
 @AllArgsConstructor
 @NoArgsConstructor
 public class ClientUpdateRequestDTO {
-    private ClientInputDTO clientInputDTO;
     private String pk;
     private String sk;
+    private String cifNifNie;
+    private String name;
+    private String surname;
+    private String phone;
+    private String email;
 }

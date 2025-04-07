@@ -20,7 +20,8 @@ public interface ClientRepository {
 
     List<Client> findByEmail(String email);
 
-    Client update(ClientInputDTO clientInputDTO, String pk, String sk);
+    //Client update(ClientInputDTO clientInputDTO, String pk, String sk);
+    void update(ClientGenericModel clientGenericModel);
 
     Optional<Client> merchantClient(Client client);
 }

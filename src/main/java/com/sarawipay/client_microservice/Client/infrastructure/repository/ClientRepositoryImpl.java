@@ -123,23 +123,18 @@ public class ClientRepositoryImpl implements ClientRepository {
     }
 
     @Override
-    public Client update(ClientInputDTO clientInputDTO, String pk, String sk) {
+    public void update(ClientGenericModel generic) {
 
-        Client existingClient = dynamoDBMapper.load(Client.class, pk, sk);
-
+        Client existingClient = dynamoDBMapper.load(Client.class, generic.getPk(), generic.getSk());
         if (existingClient != null) {
-
-            existingClient.setCifNifNie(clientInputDTO.getCifNifNie());
-            existingClient.setName(clientInputDTO.getName());
-            existingClient.setSurname(clientInputDTO.getSurname());
-            existingClient.setPhone(clientInputDTO.getPhone());
-            existingClient.setEmail(clientInputDTO.getEmail());
+            existingClient.setCifNifNie(generic.getCifNifNie());
+            existingClient.setName(generic.getName().toLowerCase());
+            existingClient.setSurname(generic.getSurname().toLowerCase());
+            existingClient.setPhone(generic.getPhone());
+            existingClient.setEmail(generic.getEmail());
 
             dynamoDBMapper.save(existingClient);
-
         }
-
-        return existingClient;
     }
 
 

@@ -27,6 +27,7 @@ public class ClientController {
 
     @PostMapping("/create")
     public void addClient(@Valid @RequestBody ClientInputDTO clientInputDTO) {
+
         ClientGenericModel generic = clientMappers.inputToModel(clientInputDTO);
 
         clientAddUseCase.addClient(generic);
@@ -48,8 +49,10 @@ public class ClientController {
     }
 
     @PutMapping("update")
-    public ClientOutputDTO update(@RequestBody ClientUpdateRequestDTO clientUpdate) {
-        return clientUpdateUseCase.update(clientUpdate.getClientInputDTO(), clientUpdate.getPk(), clientUpdate.getSk());
+    public void update(@RequestBody ClientUpdateRequestDTO clientUpdate) {
+        ClientGenericModel generic = clientMappers.updateToModel(clientUpdate);
+        clientUpdateUseCase.update(generic);
+        //return clientUpdateUseCase.update(clientUpdate.getClientInputDTO(), clientUpdate.getPk(), clientUpdate.getSk());
     }
 
 
