@@ -12,20 +12,18 @@ import java.util.Optional;
 @Repository
 public interface ClientRepository {
 
-    //Client create(Client client);
     void create(ClientGenericModel clientGenericModel);
+
     ClientGenericModel findById(String id);
 
-    //List<Client> findByName(String name);
     List<ClientGenericModel> findByName(String name);
 
-    //List<Client> findByEmail(String email);
     List<ClientGenericModel> findByEmail(String email);
 
-    //Client update(ClientInputDTO clientInputDTO, String pk, String sk);
     void update(ClientGenericModel clientGenericModel);
 
     Optional<Client> merchantClient(Client client);
+
 }
 
 // Nota: Los tres métodos "findBy" son muy parecidos entre ellos, una posible mejora sería hacer una función genérica para los tres

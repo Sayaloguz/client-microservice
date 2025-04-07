@@ -14,10 +14,6 @@ import org.mapstruct.Mapper;
 @Mapper(componentModel = "spring")
 public interface ClientMappers {
 
-    Client inputToClient(ClientInputDTO clientInputDTO);
-
-    ClientOutputDTO clientToOutput(Client client);
-
     Client modelToClient(ClientGenericModel clientGenericModel);
 
     ClientGenericModel inputToModel(ClientInputDTO clientInputDTO);
@@ -31,4 +27,5 @@ public interface ClientMappers {
     FullClientOutputDTO modelToFullOutput(ClientGenericModel clientGenericModel);
 
     ClientIdDTO modelToIdDTO(ClientGenericModel clientGenericModel);
+
 }

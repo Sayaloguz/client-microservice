@@ -24,10 +24,12 @@ import java.util.stream.Collectors;
 @RequiredArgsConstructor
 
 public class ClientController {
+
     private final ClientAddUseCase clientAddUseCase;
     private final ClientGetUseCase clientGetUseCase;
     private final ClientUpdateUseCase clientUpdateUseCase;
     private final ClientMappers clientMappers;
+
 
     @PostMapping("/create")
     public void addClient(@Valid @RequestBody ClientInputDTO clientInputDTO) {
@@ -36,6 +38,7 @@ public class ClientController {
 
         clientAddUseCase.addClient(generic);
     }
+
 
     @GetMapping("/getByName/{name}")
     public List<ClientOutputDTO> getByName(@PathVariable String name) {
@@ -51,10 +54,9 @@ public class ClientController {
 
     }
 
+
     @GetMapping("getByEmail/{email}")
     public List<ClientOutputDTO> getByEmail(@PathVariable String email) {
-
-        //return clientGetUseCase.getByEmail(email);
 
         List<ClientGenericModel> res = clientGetUseCase.getByEmail(email);
 
@@ -66,6 +68,7 @@ public class ClientController {
         return clientOutputDTOList;
     }
 
+
     @GetMapping("getById/{id}")
     public FullClientOutputDTO getById(@PathVariable String id) {
 
@@ -73,9 +76,9 @@ public class ClientController {
 
     }
 
+
     @GetMapping("getById/{id}/{simpleOutput}")
     public ClientIdDTO getByIdSimple(@PathVariable String id, @PathVariable String simpleOutput) {
-
 
         if (simpleOutput.equalsIgnoreCase("simpleOutput")) {
             return clientMappers.modelToIdDTO(clientGetUseCase.getById(id));
@@ -85,28 +88,13 @@ public class ClientController {
 
     }
 
+
     @PutMapping("update")
     public void update(@RequestBody ClientUpdateRequestDTO clientUpdate) {
 
         ClientGenericModel generic = clientMappers.updateToModel(clientUpdate);
         clientUpdateUseCase.update(generic);
-        //return clientUpdateUseCase.update(clientUpdate.getClientInputDTO(), clientUpdate.getPk(), clientUpdate.getSk());
 
     }
-
-
-    /*
-    {
-        "clientInputDTO": {
-            "cifNifNie": "12345678A",
-            "name": "MARCAS",
-            "surname": "DÍAZ",
-            "phone": "699000111",
-            "email": "marcos.diaz@mail.com"
-        },
-        "pk": "client#d3a2265f-bf29-4034-8968-ece34bbe5ad0",
-        "sk": "document#66666666U"
-    }
-     */
 
 }

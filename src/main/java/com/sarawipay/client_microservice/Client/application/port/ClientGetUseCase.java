@@ -9,13 +9,10 @@ import java.util.List;
 
 public interface ClientGetUseCase {
 
-    //List<ClientOutputDTO> getByName(String name);
     List<ClientGenericModel> getByName(String name);
 
-    //List<ClientOutputDTO> getByEmail(String email);
     List<ClientGenericModel> getByEmail(String email);
 
-    //ClientOutputDTO getById(String id);
     ClientGenericModel getById(String id);
 
 }

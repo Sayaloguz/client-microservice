@@ -6,7 +6,6 @@ import com.sarawipay.client_microservice.Client.infrastructure.controller.DTO.ou
 
 public interface ClientUpdateUseCase {
 
-    //ClientOutputDTO update(ClientInputDTO clientInputDTO, String pk, String sk);
     void update(ClientGenericModel generic);
 
 }
