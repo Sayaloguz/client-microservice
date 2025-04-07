@@ -9,6 +9,7 @@ import com.sarawipay.client_microservice.Client.infrastructure.controller.DTO.in
 import com.sarawipay.client_microservice.Client.infrastructure.controller.DTO.input.ClientUpdateRequestDTO;
 import com.sarawipay.client_microservice.Client.infrastructure.controller.DTO.output.ClientOutputDTO;
 import com.sarawipay.client_microservice.Client.infrastructure.controller.DTO.output.FullClientOutputDTO;
+import com.sarawipay.client_microservice.Client.infrastructure.controller.DTO.output.MerchantOutputDTO;
 import lombok.RequiredArgsConstructor;
 import org.springframework.web.bind.annotation.*;
 
@@ -92,6 +93,17 @@ public class ClientController {
         ClientGenericModel generic = clientMappers.updateToModel(clientUpdate);
         clientUpdateUseCase.update(generic);
 
+    }
+
+    @GetMapping("merchantExists/{idMerchant}")
+    public MerchantOutputDTO merchantExists(@PathVariable String idMerchant) {
+        MerchantOutputDTO merchantOutputDTO = new MerchantOutputDTO();
+
+        if(clientGetUseCase.merchantExists(idMerchant) != null){
+            merchantOutputDTO.setExists(true);
+        }
+
+        return merchantOutputDTO;
     }
 
 }

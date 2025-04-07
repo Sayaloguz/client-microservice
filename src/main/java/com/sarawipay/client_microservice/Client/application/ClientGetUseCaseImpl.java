@@ -1,5 +1,6 @@
 package com.sarawipay.client_microservice.Client.application;
 
+import com.sarawipay.client_microservice.Client.MerchantClient;
 import com.sarawipay.client_microservice.Client.application.port.ClientGetUseCase;
 import com.sarawipay.client_microservice.Client.domain.Client;
 import com.sarawipay.client_microservice.Client.domain.mappers.ClientMappers;
@@ -22,6 +23,7 @@ public class ClientGetUseCaseImpl implements ClientGetUseCase {
 
     private final ClientRepository clientRepository;
     private final ClientMappers clientMappers;
+    private final MerchantClient merchantClient;
 
 
     @Override
@@ -46,4 +48,13 @@ public class ClientGetUseCaseImpl implements ClientGetUseCase {
         return clientRepository.findById(id);
 
     }
+
+    @Override
+    public MerchantGenericModel merchantExists(String idMerchant) {
+
+        return merchantClient.getById(idMerchant);
+
+    }
+
+
 }

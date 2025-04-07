@@ -135,6 +135,10 @@ public class ClientRepositoryImpl implements ClientRepository {
 
         List<Client> res = dynamoDBMapper.query(Client.class, query);
 
+        if (res.isEmpty()) {
+            return null;
+        }
+
         return clientMappers.clientToModel(res.get(0));
 
     }
@@ -156,11 +160,4 @@ public class ClientRepositoryImpl implements ClientRepository {
 
     }
 
-
-    // A partir de aquí son placeholders
-
-    @Override
-    public Optional<Client> merchantClient(Client client) {
-        return Optional.empty();
-    }
 }
