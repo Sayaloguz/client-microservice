@@ -18,7 +18,8 @@ public interface ClientRepository {
 
     List<Client> findByName(String name);
 
-    List<Client> findByEmail(String email);
+    //List<Client> findByEmail(String email);
+    List<ClientGenericModel> findByEmail(String email);
 
     //Client update(ClientInputDTO clientInputDTO, String pk, String sk);
     void update(ClientGenericModel clientGenericModel);

@@ -15,6 +15,7 @@ import lombok.Setter;
 import org.springframework.stereotype.Repository;
 
 import java.util.*;
+import java.util.stream.Collectors;
 
 @Getter
 @Setter
@@ -64,7 +65,8 @@ public class ClientRepositoryImpl implements ClientRepository {
 
 
     @Override
-    public List<Client> findByEmail(String email) {
+    //public List<Client> findByEmail(String email) {
+    public List<ClientGenericModel> findByEmail(String email) {
         // Vamos a suponer que pueden haber varios clientes con el mismo correo
 
         String pkGsi = "gIndex2Pk"; // PK de GSI
@@ -87,7 +89,15 @@ public class ClientRepositoryImpl implements ClientRepository {
                 .withExpressionAttributeNames(expressionAttributeNames)
                 .withExpressionAttributeValues(expressionAtributeValues);
 
-        List<Client> res = dynamoDBMapper.query(Client.class, query);
+
+        List<Client> entities = dynamoDBMapper.query(Client.class, query);
+
+        // Lo pasamos a modelo genérico
+        List<ClientGenericModel> res = entities.stream()
+                .map(clientMappers::clientToModel)
+                .collect(Collectors.toList());
+
+        //entities.stream().forEach(client -> {res.add(clientMappers.clientToModel(client));});
 
         return res;
     }

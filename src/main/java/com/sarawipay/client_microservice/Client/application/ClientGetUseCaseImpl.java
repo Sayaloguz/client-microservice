@@ -38,16 +38,12 @@ public class ClientGetUseCaseImpl implements ClientGetUseCase {
 
 
     @Override
-    public List<ClientOutputDTO> getByEmail(String email) {
+    public List<ClientGenericModel> getByEmail(String email) {
 
-        List<Client> res = clientRepository.findByEmail(email);
+        List<ClientGenericModel> res = clientRepository.findByEmail(email);
 
-        // Transformación a DTO
-        List<ClientOutputDTO> clientOutputDTOList = res.stream()
-                .map(clientMappers::clientToOutput)
-                .collect(Collectors.toList());
+        return res;
 
-        return clientOutputDTOList;
     }
 
 

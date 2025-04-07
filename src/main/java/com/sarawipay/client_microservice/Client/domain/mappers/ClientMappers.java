@@ -22,4 +22,8 @@ public interface ClientMappers {
 
     ClientGenericModel updateToModel(ClientUpdateRequestDTO clientUpdateRequestDTO);
 
+    ClientGenericModel clientToModel(Client client);
+
+    ClientOutputDTO modelToOutput(ClientGenericModel clientGenericModel);
+
 }

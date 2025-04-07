@@ -14,6 +14,7 @@ import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
 import java.util.List;
+import java.util.stream.Collectors;
 
 @RestController
 @RequestMapping("/api")
@@ -40,7 +41,17 @@ public class ClientController {
 
     @GetMapping("getByEmail/{email}")
     public List<ClientOutputDTO> getByEmail(@PathVariable String email) {
-        return clientGetUseCase.getByEmail(email);
+
+        //return clientGetUseCase.getByEmail(email);
+
+        List<ClientGenericModel> res = clientGetUseCase.getByEmail(email);
+
+        // Transformación a DTO
+        List<ClientOutputDTO> clientOutputDTOList = res.stream()
+                .map(clientMappers::modelToOutput)
+                .collect(Collectors.toList());
+
+        return clientOutputDTOList;
     }
 
     @GetMapping("getById/{id}")
@@ -50,9 +61,11 @@ public class ClientController {
 
     @PutMapping("update")
     public void update(@RequestBody ClientUpdateRequestDTO clientUpdate) {
+
         ClientGenericModel generic = clientMappers.updateToModel(clientUpdate);
         clientUpdateUseCase.update(generic);
         //return clientUpdateUseCase.update(clientUpdate.getClientInputDTO(), clientUpdate.getPk(), clientUpdate.getSk());
+
     }
 
 
