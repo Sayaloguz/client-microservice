@@ -23,8 +23,6 @@ public class ClientUpdateUseCaseImpl implements ClientUpdateUseCase {
     @Override
     public void update(ClientGenericModel generic) {
 
-        // Client client = clientRepository.update(clientInputDTO, pk, sk);
-        // ClientOutputDTO clientOutputDTO = clientMappers.clientToOutput(client);
         clientRepository.update(generic);
 
     }
