@@ -3,7 +3,9 @@ package com.sarawipay.client_microservice.Client.infrastructure.repository;
 import com.amazonaws.services.dynamodbv2.datamodeling.DynamoDBMapper;
 import com.amazonaws.services.dynamodbv2.datamodeling.DynamoDBQueryExpression;
 import com.amazonaws.services.dynamodbv2.model.AttributeValue;
+import com.sarawipay.client_microservice.Client.application.ClientGenericModel;
 import com.sarawipay.client_microservice.Client.domain.Client;
+import com.sarawipay.client_microservice.Client.domain.mappers.ClientMappers;
 import com.sarawipay.client_microservice.Client.infrastructure.controller.DTO.input.ClientInputDTO;
 import com.sarawipay.client_microservice.Client.infrastructure.controller.DTO.output.ClientOutputDTO;
 import com.sarawipay.client_microservice.Client.infrastructure.repository.port.ClientRepository;
@@ -21,11 +23,15 @@ import java.util.*;
 public class ClientRepositoryImpl implements ClientRepository {
 
     private final DynamoDBMapper dynamoDBMapper;
+    private final ClientMappers clientMappers;
 
     @Override
-    public Client create(Client client) {
+    public void create(ClientGenericModel model) {
+
+        Client client = clientMappers.modelToClient(model);
+
         dynamoDBMapper.save(client);
-        return client;
+
     }
 
     @Override
@@ -85,7 +91,6 @@ public class ClientRepositoryImpl implements ClientRepository {
 
         return res;
     }
-
 
 
     @Override
