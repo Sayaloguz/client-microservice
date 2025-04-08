@@ -21,7 +21,8 @@ public class ClientAddUseCaseImpl implements ClientAddUseCase {
     private final ClientRepository clientRepository;
     private final ClientMappers clientMappers;
 
-    public void addClient (ClientGenericModel model) {
+
+    public void addClient(ClientGenericModel model) {
 
         // Agregamos los atributos que nos faltan para poder crear el nuevo cliente
 

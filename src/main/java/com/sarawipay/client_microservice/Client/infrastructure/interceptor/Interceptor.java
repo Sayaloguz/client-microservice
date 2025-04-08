@@ -6,8 +6,10 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
 import javax.crypto.SecretKey;
+
 import io.jsonwebtoken.SignatureAlgorithm;
 import io.jsonwebtoken.security.Keys;
+
 import java.util.Base64;
 
 import lombok.*;
@@ -23,6 +25,7 @@ import io.jsonwebtoken.SignatureException;
 @RequiredArgsConstructor
 @Component
 public class Interceptor implements HandlerInterceptor {
+    // COMENTADO PARA NO NECESITAR JWT POR COMODIDAD DE PRUEBAS
 /*
     // private static final String SECRET_KEY = Base64.getEncoder().encodeToString(Keys.secretKeyFor(SignatureAlgorithm.HS256).getEncoded());
     private static final String SECRET_KEY = "aFk7Tfz2dIceNqUyKQL++BUyKwaw4WEqBMX9Rj3djks=";

@@ -30,6 +30,7 @@ public class ClientRepositoryImpl implements ClientRepository {
     @Override
     public void create(ClientGenericModel model) {
 
+        model.setName(model.getName().toLowerCase());
         Client client = clientMappers.modelToClient(model);
 
         dynamoDBMapper.save(client);

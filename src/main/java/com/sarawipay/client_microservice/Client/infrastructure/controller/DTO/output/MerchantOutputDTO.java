@@ -12,11 +12,5 @@ import lombok.Setter;
 public class MerchantOutputDTO {
 
     private boolean exists = false;
-    /*
-    private String merchantId;
-    private String name;
-    private String address;
-    private String merchantType;
-    */
 
 }

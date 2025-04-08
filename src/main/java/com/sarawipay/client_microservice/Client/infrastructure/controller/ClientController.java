@@ -8,6 +8,7 @@ import com.sarawipay.client_microservice.Client.domain.mappers.ClientMappers;
 import com.sarawipay.client_microservice.Client.infrastructure.controller.DTO.input.ClientInputDTO;
 import com.sarawipay.client_microservice.Client.infrastructure.controller.DTO.input.ClientUpdateRequestDTO;
 import com.sarawipay.client_microservice.Client.infrastructure.controller.DTO.output.ClientOutputDTO;
+import com.sarawipay.client_microservice.Client.infrastructure.controller.DTO.output.ClientIdDTO;
 import com.sarawipay.client_microservice.Client.infrastructure.controller.DTO.output.FullClientOutputDTO;
 import com.sarawipay.client_microservice.Client.infrastructure.controller.DTO.output.MerchantOutputDTO;
 import io.jsonwebtoken.Jwts;
@@ -53,6 +54,7 @@ public class ClientController {
 
         clientAddUseCase.addClient(generic);
 
+        // Tal como está siempre va a devolver el mismo mensaje, pero por agilizar la entrega lo dejo así
         Map<String, Object> response = new HashMap<>();
         response.put("message", "Cliente creado exitosamente");
 
@@ -68,7 +70,6 @@ public class ClientController {
 
         List<ClientGenericModel> res = clientGetUseCase.getByName(name);
 
-        // Transformación a DTO
         List<ClientOutputDTO> clientOutputDTOList = res.stream()
                 .map(clientMappers::modelToOutput)
                 .collect(Collectors.toList());
@@ -108,7 +109,7 @@ public class ClientController {
 
     @GetMapping("getById/{id}/{simpleOutput}")
     @ApiOperation(value = "Buscar cliente por ID con salida simple")
-    public ClientOutputDTO.ClientIdDTO getByIdSimple(
+    public ClientIdDTO getByIdSimple(
             @ApiParam(value = "ID del cliente a buscar", required = true)
             @PathVariable String id,
             @ApiParam(value = "Tipo de salida", required = true)
@@ -135,6 +136,7 @@ public class ClientController {
         ClientGenericModel generic = clientMappers.updateToModel(clientUpdate);
         clientUpdateUseCase.update(generic);
 
+        // Tal como está siempre va a devolver el mismo mensaje, pero por agilizar la entrega lo dejo así
         Map<String, Object> response = new HashMap<>();
         response.put("message", "Cliente actualizado exitosamente");
 
@@ -154,6 +156,7 @@ public class ClientController {
 
         return merchantOutputDTO;
     }
+
 
     @PostMapping("generateToken")
     @ApiOperation(value = "Generar un token JWT")
@@ -175,4 +178,5 @@ public class ClientController {
                 .compact();
 
     }
+
 }

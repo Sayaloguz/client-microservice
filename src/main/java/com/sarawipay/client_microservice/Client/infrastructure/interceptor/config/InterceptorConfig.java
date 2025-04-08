@@ -21,6 +21,8 @@ import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
 @RequiredArgsConstructor
 @Configuration
 public class InterceptorConfig implements WebMvcConfigurer {
+    // COMENTADO PARA NO NECESITAR JWT POR COMODIDAD DE PRUEBAS
+
 /*
     private final Interceptor interceptor;
 

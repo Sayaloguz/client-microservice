@@ -10,8 +10,8 @@ import org.springframework.validation.annotation.Validated;
 @EnableFeignClients
 public class ClientMicroserviceApplication {
 
-	public static void main(String[] args) {
-		SpringApplication.run(ClientMicroserviceApplication.class, args);
-	}
+    public static void main(String[] args) {
+        SpringApplication.run(ClientMicroserviceApplication.class, args);
+    }
 
 }

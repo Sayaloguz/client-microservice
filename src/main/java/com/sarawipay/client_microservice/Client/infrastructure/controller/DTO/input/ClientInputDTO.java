@@ -28,13 +28,4 @@ public class ClientInputDTO {
     private String email;
 
 
-    public void setName(String name) {
-        this.name = name.toLowerCase();
-    }
-
-    // No usamos este setter, pero es por coherencia
-    public void setSurname(String surname) {
-        this.surname = surname.toLowerCase();
-    }
-
 }

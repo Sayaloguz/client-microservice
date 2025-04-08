@@ -7,6 +7,7 @@ import lombok.*;
 @AllArgsConstructor
 @NoArgsConstructor
 public class ClientUpdateRequestDTO {
+
     private String pk;
     private String sk;
     private String cifNifNie;
@@ -14,4 +15,5 @@ public class ClientUpdateRequestDTO {
     private String surname;
     private String phone;
     private String email;
+
 }
