@@ -10,11 +10,16 @@ import com.sarawipay.client_microservice.Client.infrastructure.controller.DTO.in
 import com.sarawipay.client_microservice.Client.infrastructure.controller.DTO.output.ClientOutputDTO;
 import com.sarawipay.client_microservice.Client.infrastructure.controller.DTO.output.FullClientOutputDTO;
 import com.sarawipay.client_microservice.Client.infrastructure.controller.DTO.output.MerchantOutputDTO;
+import io.jsonwebtoken.Jwts;
+import io.jsonwebtoken.SignatureAlgorithm;
 import lombok.RequiredArgsConstructor;
 import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
+import java.util.Date;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.stream.Collectors;
 
 @RestController
@@ -27,6 +32,8 @@ public class ClientController {
     private final ClientGetUseCase clientGetUseCase;
     private final ClientUpdateUseCase clientUpdateUseCase;
     private final ClientMappers clientMappers;
+
+    private static final String SECRET_KEY = "aFk7Tfz2dIceNqUyKQL++BUyKwaw4WEqBMX9Rj3djks=";
 
 
     @PostMapping("/create")
@@ -106,4 +113,19 @@ public class ClientController {
         return merchantOutputDTO;
     }
 
+    @PostMapping("generateToken")
+    public String generateToken(@RequestParam String name, @RequestParam int age) {
+
+        Map<String, Object> claims = new HashMap<>();
+        claims.put("name", name);
+        claims.put("age", age);
+
+        return Jwts.builder()
+                .setClaims(claims)
+                .setIssuedAt(new Date())
+                .setExpiration(new Date(System.currentTimeMillis() + 1000 * 60 * 60 * 10))
+                .signWith(SignatureAlgorithm.HS256, SECRET_KEY)
+                .compact();
+
+    }
 }
