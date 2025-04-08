@@ -27,4 +27,5 @@ public class MainTable {
 
     @DynamoDBAttribute(attributeName = "createTime")
     private String createTime;
+
 }

@@ -18,7 +18,8 @@ public class ClientOutputDTO {
     private String email;
 
 
-    // Necesitamos este setter para poder convertir el nombre a minúsculas
+    // Convertir el nombre a minúsculas
+    // Podríamos haber tratado estos datos en el servicio, y seguramente fuera más apropiado
     public void setName(String name) {
         StringBuilder sb = new StringBuilder(name.length());
         sb.append(Character.toUpperCase(name.charAt(0)));
@@ -34,4 +35,6 @@ public class ClientOutputDTO {
 
         this.surname = sb.toString();
     }
+
+
 }
