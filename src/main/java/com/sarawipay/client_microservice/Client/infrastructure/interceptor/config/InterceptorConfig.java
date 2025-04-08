@@ -21,7 +21,7 @@ import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
 @RequiredArgsConstructor
 @Configuration
 public class InterceptorConfig implements WebMvcConfigurer {
-
+/*
     private final Interceptor interceptor;
 
     @Override
@@ -38,4 +38,6 @@ public class InterceptorConfig implements WebMvcConfigurer {
                 .allowedMethods("GET", "POST", "PUT", "DELETE", "OPTIONS")
                 .allowedHeaders("Authorization", "Content-Type");
     }
+    */
+
 }

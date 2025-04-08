@@ -23,7 +23,7 @@ import io.jsonwebtoken.SignatureException;
 @RequiredArgsConstructor
 @Component
 public class Interceptor implements HandlerInterceptor {
-
+/*
     // private static final String SECRET_KEY = Base64.getEncoder().encodeToString(Keys.secretKeyFor(SignatureAlgorithm.HS256).getEncoded());
     private static final String SECRET_KEY = "aFk7Tfz2dIceNqUyKQL++BUyKwaw4WEqBMX9Rj3djks=";
 
@@ -72,4 +72,6 @@ public class Interceptor implements HandlerInterceptor {
             return false;
         }
     }
+    */
+
 }

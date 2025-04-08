@@ -1,4 +1,4 @@
-package com.sarawipay.client_microservice.Client.infrastructure.controller.DTO;
+package com.sarawipay.client_microservice.Client.infrastructure.controller;
 
 import com.sarawipay.client_microservice.Client.application.ClientGenericModel;
 import com.sarawipay.client_microservice.Client.application.port.ClientAddUseCase;
@@ -12,7 +12,10 @@ import com.sarawipay.client_microservice.Client.infrastructure.controller.DTO.ou
 import com.sarawipay.client_microservice.Client.infrastructure.controller.DTO.output.MerchantOutputDTO;
 import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.SignatureAlgorithm;
+import io.swagger.annotations.*;
 import lombok.RequiredArgsConstructor;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
@@ -22,10 +25,10 @@ import java.util.List;
 import java.util.Map;
 import java.util.stream.Collectors;
 
+@Api(value = "API REST del microservicio de clients")
 @RestController
 @RequestMapping("/api")
 @RequiredArgsConstructor
-
 public class ClientController {
 
     private final ClientAddUseCase clientAddUseCase;
@@ -37,16 +40,31 @@ public class ClientController {
 
 
     @PostMapping("/create")
-    public void addClient(@Valid @RequestBody ClientInputDTO clientInputDTO) {
+    @ApiOperation(value = "Crear un nuevo cliente")
+    @ApiResponses(value = {
+            @ApiResponse(code = 201, message = "Cliente creado exitosamente", response = Map.class),
+    })
+
+    public ResponseEntity<Map<String, Object>> addClient(
+            @ApiParam(value = "Datos del cliente a crear", required = true)
+            @Valid @RequestBody ClientInputDTO clientInputDTO) {
 
         ClientGenericModel generic = clientMappers.inputToModel(clientInputDTO);
 
         clientAddUseCase.addClient(generic);
+
+        Map<String, Object> response = new HashMap<>();
+        response.put("message", "Cliente creado exitosamente");
+
+        return ResponseEntity.status(HttpStatus.CREATED).body(response);
     }
 
 
     @GetMapping("/getByName/{name}")
-    public List<ClientOutputDTO> getByName(@PathVariable String name) {
+    @ApiOperation(value = "Buscar clientes por nombre")
+    public List<ClientOutputDTO> getByName(
+            @ApiParam(value = "Nombre del cliente a buscar", required = true)
+            @PathVariable String name) {
 
         List<ClientGenericModel> res = clientGetUseCase.getByName(name);
 
@@ -61,7 +79,10 @@ public class ClientController {
 
 
     @GetMapping("getByEmail/{email}")
-    public List<ClientOutputDTO> getByEmail(@PathVariable String email) {
+    @ApiOperation(value = "Buscar clientes por email")
+    public List<ClientOutputDTO> getByEmail(
+            @ApiParam(value = "Email del cliente a buscar", required = true)
+            @PathVariable String email) {
 
         List<ClientGenericModel> res = clientGetUseCase.getByEmail(email);
 
@@ -75,7 +96,10 @@ public class ClientController {
 
 
     @GetMapping("getById/{id}")
-    public FullClientOutputDTO getById(@PathVariable String id) {
+    @ApiOperation(value = "Buscar cliente por ID")
+    public FullClientOutputDTO getById(
+            @ApiParam(value = "ID del cliente a buscar", required = true)
+            @PathVariable String id) {
 
         return clientMappers.modelToFullOutput(clientGetUseCase.getById(id));
 
@@ -83,7 +107,12 @@ public class ClientController {
 
 
     @GetMapping("getById/{id}/{simpleOutput}")
-    public ClientOutputDTO.ClientIdDTO getByIdSimple(@PathVariable String id, @PathVariable String simpleOutput) {
+    @ApiOperation(value = "Buscar cliente por ID con salida simple")
+    public ClientOutputDTO.ClientIdDTO getByIdSimple(
+            @ApiParam(value = "ID del cliente a buscar", required = true)
+            @PathVariable String id,
+            @ApiParam(value = "Tipo de salida", required = true)
+            @PathVariable String simpleOutput) {
 
         if (simpleOutput.equalsIgnoreCase("simpleOutput")) {
             return clientMappers.modelToIdDTO(clientGetUseCase.getById(id));
@@ -95,18 +124,31 @@ public class ClientController {
 
 
     @PutMapping("update")
-    public void update(@RequestBody ClientUpdateRequestDTO clientUpdate) {
+    @ApiOperation(value = "Actualizar cliente")
+    @ApiResponses(value = {
+            @ApiResponse(code = 201, message = "Cliente actualizado exitosamente", response = Map.class),
+    })
+    public ResponseEntity<Map<String, Object>> update(
+            @ApiParam(value = "Datos del cliente a actualizar", required = true)
+            @RequestBody ClientUpdateRequestDTO clientUpdate) {
 
         ClientGenericModel generic = clientMappers.updateToModel(clientUpdate);
         clientUpdateUseCase.update(generic);
 
+        Map<String, Object> response = new HashMap<>();
+        response.put("message", "Cliente actualizado exitosamente");
+
+        return ResponseEntity.status(HttpStatus.CREATED).body(response);
     }
 
     @GetMapping("merchantExists/{idMerchant}")
-    public MerchantOutputDTO merchantExists(@PathVariable String idMerchant) {
+    @ApiOperation(value = "Comprobar si un comercio existe")
+    public MerchantOutputDTO merchantExists(
+            @ApiParam(value = "ID del comercio a comprobar", required = true)
+            @PathVariable String idMerchant) {
         MerchantOutputDTO merchantOutputDTO = new MerchantOutputDTO();
 
-        if(clientGetUseCase.merchantExists(idMerchant) != null){
+        if (clientGetUseCase.merchantExists(idMerchant) != null) {
             merchantOutputDTO.setExists(true);
         }
 
@@ -114,7 +156,12 @@ public class ClientController {
     }
 
     @PostMapping("generateToken")
-    public String generateToken(@RequestParam String name, @RequestParam int age) {
+    @ApiOperation(value = "Generar un token JWT")
+    public String generateToken(
+            @ApiParam(value = "Nombre del usuario", required = true)
+            @RequestParam String name,
+            @ApiParam(value = "Edad del usuario", required = true)
+            @RequestParam int age) {
 
         Map<String, Object> claims = new HashMap<>();
         claims.put("name", name);
