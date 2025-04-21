@@ -18,6 +18,7 @@ public interface ClientRepository {
 
     void update(ClientGenericModel clientGenericModel);
 
+    List<ClientGenericModel> findAllClients();
 }
 
 // Nota: Los tres métodos "findBy" son muy parecidos entre ellos, una posible mejora sería hacer una función genérica para los tres

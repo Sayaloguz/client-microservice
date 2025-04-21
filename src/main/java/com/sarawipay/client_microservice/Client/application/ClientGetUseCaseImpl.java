@@ -52,5 +52,10 @@ public class ClientGetUseCaseImpl implements ClientGetUseCase {
 
     }
 
+    @Override
+    public List<ClientGenericModel> getAllClients() {
+        return clientRepository.findAllClients();
+    }
+
 
 }

@@ -161,4 +161,34 @@ public class ClientRepositoryImpl implements ClientRepository {
 
     }
 
+    @Override
+    public List<ClientGenericModel> findAllClients() {
+
+        String pkGsi = "gIndex2Pk"; // PK de GSI
+
+        Map<String, String> expressionAttributeNames = new HashMap<>();
+        expressionAttributeNames.put("#pkAttr", pkGsi);
+
+        Map<String, AttributeValue> expressionAtributeValues = new HashMap<>();
+        expressionAtributeValues.put(":pkVal", new AttributeValue().withS("entityClient")); // Solo buscamos clientes
+
+        DynamoDBQueryExpression<Client> query = new DynamoDBQueryExpression<Client>()
+                .withIndexName("gIndex2Pk")
+                .withConsistentRead(false)
+                .withKeyConditionExpression("#pkAttr = :pkVal")
+                // Asignación de nombres y valores
+                .withExpressionAttributeNames(expressionAttributeNames)
+                .withExpressionAttributeValues(expressionAtributeValues);
+
+        List<Client> entities = dynamoDBMapper.query(Client.class, query);
+
+        // Lo pasamos a modelo genérico
+
+        List<ClientGenericModel> res = entities.stream()
+                .map(clientMappers::clientToModel)
+                .collect(Collectors.toList());
+
+        return res;
+    }
+
 }
