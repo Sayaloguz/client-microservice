@@ -181,7 +181,7 @@ public class ClientController {
 
     @GetMapping("/getClients")
     @ApiOperation(value = "Obtener todos los clientes")
-    public List<ClientOutputDTO> getAllClients() {
+    /*public List<ClientOutputDTO> getAllClients() {
         List<ClientGenericModel> res = clientGetUseCase.getAllClients();
 
         // Transformación a DTO
@@ -190,6 +190,17 @@ public class ClientController {
                 .collect(Collectors.toList());
 
         return clientOutputDTOList;
+    }*/
+    public List<FullClientOutputDTO> getAllClients() {
+        List<ClientGenericModel> res = clientGetUseCase.getAllClients();
+
+        // Transformación a DTO
+        List<FullClientOutputDTO> clientOutputDTOList = res.stream()
+                .map(clientMappers::modelToFullOutput)
+                .collect(Collectors.toList());
+
+        return clientOutputDTOList;
     }
+
 
 }
