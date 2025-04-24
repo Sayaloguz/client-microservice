@@ -6,6 +6,8 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 
+import static com.sarawipay.client_microservice.Client.infrastructure.controller.DTO.utils.DataNormalization.firstLetterToUpperCase;
+
 @Getter
 @Setter
 @AllArgsConstructor
@@ -21,11 +23,7 @@ public class MerchantResponseDTO {
     // Necesitamos este setter para formatear el nombre
     public void setName(String name) {
 
-        StringBuilder sb = new StringBuilder(name.length());
-        sb.append(Character.toUpperCase(name.charAt(0)));
-        sb.append(name.substring(1).toLowerCase());
-
-        this.name = sb.toString();
+        this.name = firstLetterToUpperCase(name);
     }
 
 

@@ -5,6 +5,9 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 
+import static com.sarawipay.client_microservice.Client.infrastructure.controller.DTO.utils.DataNormalization.*;
+import static com.sarawipay.client_microservice.Client.infrastructure.controller.DTO.utils.DataNormalization.normalizeEmail;
+
 
 @Getter
 @Setter
@@ -18,23 +21,26 @@ public class ClientOutputDTO {
     private String email;
 
 
-    // Convertir el nombre a minúsculas
-    // Podríamos haber tratado estos datos en el servicio, y seguramente fuera más apropiado
-    public void setName(String name) {
-        StringBuilder sb = new StringBuilder(name.length());
-        sb.append(Character.toUpperCase(name.charAt(0)));
-        sb.append(name.substring(1).toLowerCase());
+    public void setCifNifNie(String cifNifNie){
+        this.cifNifNie = normalizeCifNifNie(cifNifNie);
+    }
 
-        this.name = sb.toString();
+    public void setName(String name){
+        this.name = firstLetterToUpperCase(name);
     }
 
     public void setSurname(String surname){
-        StringBuilder sb = new StringBuilder(surname.length());
-        sb.append(Character.toUpperCase(surname.charAt(0)));
-        sb.append(surname.substring(1).toLowerCase());
-
-        this.surname = sb.toString();
+        this.surname = firstLetterToUpperCase(surname);
     }
+
+    public void setPhone(String phone){
+        this.phone = normalizePhone(phone);
+    }
+
+    public void setEmail(String email){
+        this.email = normalizeEmail(email);
+    }
+
 
 
 }
