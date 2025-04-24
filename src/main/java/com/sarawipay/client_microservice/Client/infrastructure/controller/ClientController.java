@@ -2,6 +2,7 @@ package com.sarawipay.client_microservice.Client.infrastructure.controller;
 
 import com.sarawipay.client_microservice.Client.application.ClientGenericModel;
 import com.sarawipay.client_microservice.Client.application.port.ClientAddUseCase;
+import com.sarawipay.client_microservice.Client.application.port.ClientDeleteUseCase;
 import com.sarawipay.client_microservice.Client.application.port.ClientGetUseCase;
 import com.sarawipay.client_microservice.Client.application.port.ClientUpdateUseCase;
 import com.sarawipay.client_microservice.Client.domain.mappers.ClientMappers;
@@ -35,6 +36,7 @@ public class ClientController {
     private final ClientAddUseCase clientAddUseCase;
     private final ClientGetUseCase clientGetUseCase;
     private final ClientUpdateUseCase clientUpdateUseCase;
+    private final ClientDeleteUseCase clientDeleteUseCase;
     private final ClientMappers clientMappers;
 
     private static final String SECRET_KEY = "aFk7Tfz2dIceNqUyKQL++BUyKwaw4WEqBMX9Rj3djks=";
@@ -200,6 +202,16 @@ public class ClientController {
                 .collect(Collectors.toList());
 
         return clientOutputDTOList;
+    }
+
+    @DeleteMapping("deleteClient/{id}")
+    @ApiOperation(value = "Eliminar un cliente")
+    public void deleteClient(
+            @ApiParam(value = "ID del cliente a buscar", required = true)
+            @PathVariable String id
+    ){
+        clientDeleteUseCase.delete(id);
+
     }
 
 

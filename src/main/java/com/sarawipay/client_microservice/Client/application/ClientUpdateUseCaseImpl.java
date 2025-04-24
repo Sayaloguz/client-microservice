@@ -15,8 +15,6 @@ import org.springframework.stereotype.Service;
 public class ClientUpdateUseCaseImpl implements ClientUpdateUseCase {
 
     private final ClientRepository clientRepository;
-    private final ClientMappers clientMappers;
-
 
     @Override
     public void update(ClientGenericModel generic) {

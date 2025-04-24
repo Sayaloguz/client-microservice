@@ -191,4 +191,35 @@ public class ClientRepositoryImpl implements ClientRepository {
         return res;
     }
 
+    @Override
+    public void delete(String id) {
+
+        String pkGsi = "gIndex2Pk"; // PK de GSI
+
+        Map<String, String> expressionAttributeNames = new HashMap<>();
+        expressionAttributeNames.put("#pkAttr", pkGsi);
+        expressionAttributeNames.put("#idAttr", "id");
+
+        Map<String, AttributeValue> expressionAtributeValues = new HashMap<>();
+        expressionAtributeValues.put(":pkVal", new AttributeValue().withS("entityClient")); // Solo buscamos clientes
+        expressionAtributeValues.put(":id", new AttributeValue().withS(id));
+
+
+        DynamoDBQueryExpression<Client> query = new DynamoDBQueryExpression<Client>()
+                .withIndexName("gIndex2Pk")
+                .withConsistentRead(false)
+                .withKeyConditionExpression("#pkAttr = :pkVal")
+                .withFilterExpression("#idAttr = :id")
+                // Asignación de nombres y valores
+                .withExpressionAttributeNames(expressionAttributeNames)
+                .withExpressionAttributeValues(expressionAtributeValues);
+
+        List<Client> res = dynamoDBMapper.query(Client.class, query);
+
+        Client client = res.get(0);
+
+        dynamoDBMapper.delete(client);
+
+    }
+
 }
