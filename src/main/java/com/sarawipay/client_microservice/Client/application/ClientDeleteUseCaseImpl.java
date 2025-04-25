@@ -16,7 +16,7 @@ public class ClientDeleteUseCaseImpl implements ClientDeleteUseCase {
 
     @Override
     public void delete(String idClient) {
-
+        // Usar el método que tengo, comprobar que existe y ya se lo pasamos directamente para borrar
         clientRepository.delete(idClient);
 
     }

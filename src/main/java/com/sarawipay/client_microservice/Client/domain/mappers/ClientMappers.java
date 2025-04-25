@@ -9,8 +9,10 @@ import com.sarawipay.client_microservice.Client.infrastructure.controller.DTO.ou
 import com.sarawipay.client_microservice.Client.infrastructure.controller.DTO.output.ClientOutputDTO;
 import com.sarawipay.client_microservice.Client.infrastructure.controller.DTO.output.FullClientOutputDTO;
 import org.mapstruct.Mapper;
+import org.mapstruct.Mapping;
 
-
+// "Normalizar" los datos aquí, no en el DTO, investigar sobre las anotaciones que hay para MapStruct
+// @Mapping con target y source o expression, ver parámetros disponibles
 @Mapper(componentModel = "spring")
 public interface ClientMappers {
 

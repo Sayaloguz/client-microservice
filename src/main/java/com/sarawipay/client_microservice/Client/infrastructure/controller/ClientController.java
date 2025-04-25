@@ -142,9 +142,10 @@ public class ClientController {
         Map<String, Object> response = new HashMap<>();
         response.put("message", "Cliente actualizado exitosamente");
 
-        return ResponseEntity.status(HttpStatus.CREATED).body(response);
+        return ResponseEntity.status(HttpStatus.OK).body(response);
     }
 
+    // Devolver el objeto si existe y si no un 404
     @GetMapping("merchantExists/{idMerchant}")
     @ApiOperation(value = "Comprobar si un comercio existe")
     public MerchantOutputDTO merchantExists(
@@ -160,6 +161,7 @@ public class ClientController {
     }
 
 
+    // Lo suyo sería que la lógica fuera en el servicio para dejar el EP lo más limpio posible
     @PostMapping("generateToken")
     @ApiOperation(value = "Generar un token JWT")
     public String generateToken(
@@ -180,6 +182,7 @@ public class ClientController {
                 .compact();
 
     }
+
 
     @GetMapping("/getClients")
     @ApiOperation(value = "Obtener todos los clientes")
@@ -204,6 +207,8 @@ public class ClientController {
         return clientOutputDTOList;
     }
 
+
+    // Devolver algo de feedback, ya sea con un booleano o una excepción
     @DeleteMapping("deleteClient/{id}")
     @ApiOperation(value = "Eliminar un cliente")
     public void deleteClient(

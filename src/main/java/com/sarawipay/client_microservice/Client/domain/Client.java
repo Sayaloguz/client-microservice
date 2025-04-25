@@ -2,7 +2,7 @@ package com.sarawipay.client_microservice.Client.domain;
 
 import com.amazonaws.services.dynamodbv2.datamodeling.DynamoDBAttribute;
 import lombok.*;
-
+// Hacer un nuevo atributo para la búsqueda por nombre
 @Setter
 @Getter
 @AllArgsConstructor

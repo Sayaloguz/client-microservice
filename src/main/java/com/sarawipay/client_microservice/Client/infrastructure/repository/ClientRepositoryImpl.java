@@ -81,6 +81,7 @@ public class ClientRepositoryImpl implements ClientRepository {
 
         Map<String, String> expressionAttributeNames = new HashMap<>();
         expressionAttributeNames.put("#pkAttr", pkGsi);
+        // En este caso esto no sería necesario ya que no es una palabra reservada de dynamo
         expressionAttributeNames.put("#emailAttr", "email");
 
         Map<String, AttributeValue> expressionAtributeValues = new HashMap<>();
@@ -91,8 +92,8 @@ public class ClientRepositoryImpl implements ClientRepository {
         DynamoDBQueryExpression<Client> query = new DynamoDBQueryExpression<Client>()
                 .withIndexName("gIndex2Pk")
                 .withConsistentRead(false)
-                .withKeyConditionExpression("#pkAttr = :pkVal")
-                .withFilterExpression("#emailAttr = :email")
+                .withKeyConditionExpression("pkAttr = :pkVal")
+                .withFilterExpression("  = :email") //
                 // Asignación de nombres y valores
                 .withExpressionAttributeNames(expressionAttributeNames)
                 .withExpressionAttributeValues(expressionAtributeValues);

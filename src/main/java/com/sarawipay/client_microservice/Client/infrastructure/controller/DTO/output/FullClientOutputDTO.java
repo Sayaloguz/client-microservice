@@ -1,6 +1,5 @@
 package com.sarawipay.client_microservice.Client.infrastructure.controller.DTO.output;
 
-import com.sarawipay.client_microservice.Client.infrastructure.controller.DTO.utils.DataNormalization;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
