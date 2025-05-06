@@ -8,8 +8,7 @@ import lombok.*;
 @NoArgsConstructor
 public class ClientUpdateRequestDTO {
 
-    private String pk;
-    private String sk;
+    private String id;
     private String cifNifNie;
     private String name;
     private String surname;

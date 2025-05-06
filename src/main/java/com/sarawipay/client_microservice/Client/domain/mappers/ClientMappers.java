@@ -2,12 +2,14 @@ package com.sarawipay.client_microservice.Client.domain.mappers;
 
 
 import com.sarawipay.client_microservice.Client.application.ClientGenericModel;
+import com.sarawipay.client_microservice.Client.application.MerchantGenericModel;
 import com.sarawipay.client_microservice.Client.domain.Client;
 import com.sarawipay.client_microservice.Client.infrastructure.controller.DTO.input.ClientInputDTO;
 import com.sarawipay.client_microservice.Client.infrastructure.controller.DTO.input.ClientUpdateRequestDTO;
 import com.sarawipay.client_microservice.Client.infrastructure.controller.DTO.output.ClientIdDTO;
 import com.sarawipay.client_microservice.Client.infrastructure.controller.DTO.output.ClientOutputDTO;
 import com.sarawipay.client_microservice.Client.infrastructure.controller.DTO.output.FullClientOutputDTO;
+import com.sarawipay.client_microservice.Client.infrastructure.controller.DTO.output.MerchantOutputDTO;
 import org.mapstruct.Mapper;
 import org.mapstruct.Mapping;
 
@@ -29,5 +31,9 @@ public interface ClientMappers {
     FullClientOutputDTO modelToFullOutput(ClientGenericModel clientGenericModel);
 
     ClientIdDTO modelToIdDTO(ClientGenericModel clientGenericModel);
+
+    MerchantOutputDTO modelToMerchantDto(MerchantGenericModel merchantGenericModel);
+
+    MerchantGenericModel merchantDtoToModel(MerchantOutputDTO merchantOutputDTO);
 
 }

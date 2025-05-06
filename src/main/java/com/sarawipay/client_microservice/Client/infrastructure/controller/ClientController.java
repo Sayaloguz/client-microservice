@@ -1,6 +1,7 @@
 package com.sarawipay.client_microservice.Client.infrastructure.controller;
 
 import com.sarawipay.client_microservice.Client.application.ClientGenericModel;
+import com.sarawipay.client_microservice.Client.application.MerchantGenericModel;
 import com.sarawipay.client_microservice.Client.application.port.ClientAddUseCase;
 import com.sarawipay.client_microservice.Client.application.port.ClientDeleteUseCase;
 import com.sarawipay.client_microservice.Client.application.port.ClientGetUseCase;
@@ -154,7 +155,7 @@ public class ClientController {
         MerchantOutputDTO merchantOutputDTO = new MerchantOutputDTO();
 
         if (clientGetUseCase.merchantExists(idMerchant) != null) {
-            merchantOutputDTO.setExists(true);
+            //merchantOutputDTO.setExists(true);
         }
 
         return merchantOutputDTO;
@@ -216,6 +217,22 @@ public class ClientController {
             @PathVariable String id
     ){
         clientDeleteUseCase.delete(id);
+
+    }
+
+    @GetMapping("getMerchantsByClientId/{id}")
+    @ApiOperation(value = "Obtener todos los merchants de un cliente")
+    public List<MerchantOutputDTO> getMerchantsByClientId(
+            @ApiParam(value = "ID del cliente a buscar", required = true)
+            @PathVariable String id) {
+
+        List<MerchantGenericModel> res = clientGetUseCase.getMerchantsByClientId(id);
+        List<MerchantOutputDTO> resDto = res.stream()
+                .map(clientMappers::modelToMerchantDto)
+                .collect(Collectors.toList());
+
+
+        return resDto;
 
     }
 

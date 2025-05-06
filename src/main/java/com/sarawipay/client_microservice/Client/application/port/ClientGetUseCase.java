@@ -17,4 +17,7 @@ public interface ClientGetUseCase {
     MerchantGenericModel merchantExists(String idMerchant);
 
     List<ClientGenericModel> getAllClients();
+
+    List<MerchantGenericModel> getMerchantsByClientId(String clientId);
+
 }

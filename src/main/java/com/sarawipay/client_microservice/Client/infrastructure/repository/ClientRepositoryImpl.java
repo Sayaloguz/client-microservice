@@ -4,6 +4,7 @@ import com.amazonaws.services.dynamodbv2.datamodeling.DynamoDBMapper;
 import com.amazonaws.services.dynamodbv2.datamodeling.DynamoDBQueryExpression;
 import com.amazonaws.services.dynamodbv2.model.AttributeValue;
 import com.sarawipay.client_microservice.Client.application.ClientGenericModel;
+import com.sarawipay.client_microservice.Client.application.MerchantGenericModel;
 import com.sarawipay.client_microservice.Client.domain.Client;
 import com.sarawipay.client_microservice.Client.domain.mappers.ClientMappers;
 import com.sarawipay.client_microservice.Client.infrastructure.controller.DTO.input.ClientInputDTO;
@@ -149,7 +150,9 @@ public class ClientRepositoryImpl implements ClientRepository {
     @Override
     public void update(ClientGenericModel generic) {
 
-        Client existingClient = dynamoDBMapper.load(Client.class, generic.getPk(), generic.getSk());
+        Client existingClient = clientMappers.modelToClient(this.findById(generic.getId()));
+
+        // Client existingClient = dynamoDBMapper.load(Client.class, generic.getPk(), generic.getSk());
         if (existingClient != null) {
             existingClient.setCifNifNie(generic.getCifNifNie());
             existingClient.setName(generic.getName().toLowerCase());
@@ -161,6 +164,8 @@ public class ClientRepositoryImpl implements ClientRepository {
         }
 
     }
+
+
 
     @Override
     public List<ClientGenericModel> findAllClients() {
@@ -222,5 +227,6 @@ public class ClientRepositoryImpl implements ClientRepository {
         dynamoDBMapper.delete(client);
 
     }
+
 
 }

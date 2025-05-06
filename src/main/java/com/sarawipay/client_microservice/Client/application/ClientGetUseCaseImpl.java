@@ -57,5 +57,9 @@ public class ClientGetUseCaseImpl implements ClientGetUseCase {
         return clientRepository.findAllClients();
     }
 
+    public List<MerchantGenericModel> getMerchantsByClientId(String clientId) {
+        return merchantClient.getMerchantsByClientId(clientId);
+    }
+
 
 }
