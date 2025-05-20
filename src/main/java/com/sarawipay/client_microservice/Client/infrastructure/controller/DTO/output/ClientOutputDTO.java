@@ -14,6 +14,7 @@ import static com.sarawipay.client_microservice.Client.infrastructure.controller
 @NoArgsConstructor
 @AllArgsConstructor
 public class ClientOutputDTO {
+    private String id;
     private String cifNifNie;
     private String name;
     private String surname;

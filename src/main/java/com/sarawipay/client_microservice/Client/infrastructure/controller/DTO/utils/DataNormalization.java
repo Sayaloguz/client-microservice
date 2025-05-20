@@ -19,7 +19,7 @@ public class DataNormalization {
         if (phone == null || phone.isEmpty()) {
             return null;
         }
-
+        /*
         StringBuilder result = new StringBuilder();
         for (int i = 0; i < phone.length(); i++) {
             result.append(phone.charAt(i));
@@ -27,7 +27,10 @@ public class DataNormalization {
                 result.append(" ");
             }
         }
+
         return result.toString();
+        */
+        return phone;
     }
     public static String firstLetterToUpperCase(String name) {
         StringBuilder sb = new StringBuilder(name.length());

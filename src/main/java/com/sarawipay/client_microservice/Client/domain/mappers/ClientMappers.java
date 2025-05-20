@@ -12,9 +12,8 @@ import com.sarawipay.client_microservice.Client.infrastructure.controller.DTO.ou
 import com.sarawipay.client_microservice.Client.infrastructure.controller.DTO.output.MerchantOutputDTO;
 import org.mapstruct.Mapper;
 import org.mapstruct.Mapping;
+import org.mapstruct.Named;
 
-// "Normalizar" los datos aquí, no en el DTO, investigar sobre las anotaciones que hay para MapStruct
-// @Mapping con target y source o expression, ver parámetros disponibles
 @Mapper(componentModel = "spring")
 public interface ClientMappers {
 
@@ -26,14 +25,24 @@ public interface ClientMappers {
 
     ClientGenericModel clientToModel(Client client);
 
-    ClientOutputDTO modelToOutput(ClientGenericModel clientGenericModel);
-
-    FullClientOutputDTO modelToFullOutput(ClientGenericModel clientGenericModel);
-
     ClientIdDTO modelToIdDTO(ClientGenericModel clientGenericModel);
 
     MerchantOutputDTO modelToMerchantDto(MerchantGenericModel merchantGenericModel);
 
     MerchantGenericModel merchantDtoToModel(MerchantOutputDTO merchantOutputDTO);
 
+    @Mapping(target = "name", source = "name", qualifiedByName = "capitalizeName")
+    ClientOutputDTO modelToOutput(ClientGenericModel clientGenericModel);
+
+    @Mapping(target = "name", source = "name", qualifiedByName = "capitalizeName")
+    FullClientOutputDTO modelToFullOutput(ClientGenericModel clientGenericModel);
+
+    
+    @Named("capitalizeName")
+    public static String capitalizeName(String name) {
+        if (name == null || name.isEmpty()) {
+            return name;
+        }
+        return Character.toUpperCase(name.charAt(0)) + name.substring(1).toLowerCase();
+    }
 }

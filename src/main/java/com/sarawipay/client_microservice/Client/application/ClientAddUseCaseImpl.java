@@ -22,9 +22,7 @@ public class ClientAddUseCaseImpl implements ClientAddUseCase {
     private final ClientMappers clientMappers;
 
 
-    public void addClient(ClientGenericModel model) {
-
-        // Agregamos los atributos que nos faltan para poder crear el nuevo cliente
+    public ClientGenericModel addClient(ClientGenericModel model) {
 
         String id = UUID.randomUUID().toString();
         model.setId(id);
@@ -34,7 +32,7 @@ public class ClientAddUseCaseImpl implements ClientAddUseCase {
         model.setCreateTime(String.valueOf(new Date()));
         model.setGIndex2Pk("entityClient");
 
-        clientRepository.create(model);
+        return clientRepository.create(model);
 
     }
 

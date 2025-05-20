@@ -17,9 +17,9 @@ public class ClientUpdateUseCaseImpl implements ClientUpdateUseCase {
     private final ClientRepository clientRepository;
 
     @Override
-    public void update(ClientGenericModel generic) {
+    public ClientGenericModel update(ClientGenericModel generic) {
 
-        clientRepository.update(generic);
+        return clientRepository.update(generic);
 
     }
 

@@ -2,10 +2,12 @@ package com.sarawipay.client_microservice.Client.infrastructure.controller;
 
 import com.sarawipay.client_microservice.Client.application.ClientGenericModel;
 import com.sarawipay.client_microservice.Client.application.MerchantGenericModel;
+import com.sarawipay.client_microservice.Client.application.TokenService;
 import com.sarawipay.client_microservice.Client.application.port.ClientAddUseCase;
 import com.sarawipay.client_microservice.Client.application.port.ClientDeleteUseCase;
 import com.sarawipay.client_microservice.Client.application.port.ClientGetUseCase;
 import com.sarawipay.client_microservice.Client.application.port.ClientUpdateUseCase;
+import com.sarawipay.client_microservice.Client.domain.GenericResponseEntity;
 import com.sarawipay.client_microservice.Client.domain.mappers.ClientMappers;
 import com.sarawipay.client_microservice.Client.infrastructure.controller.DTO.input.ClientInputDTO;
 import com.sarawipay.client_microservice.Client.infrastructure.controller.DTO.input.ClientUpdateRequestDTO;
@@ -13,8 +15,6 @@ import com.sarawipay.client_microservice.Client.infrastructure.controller.DTO.ou
 import com.sarawipay.client_microservice.Client.infrastructure.controller.DTO.output.ClientIdDTO;
 import com.sarawipay.client_microservice.Client.infrastructure.controller.DTO.output.FullClientOutputDTO;
 import com.sarawipay.client_microservice.Client.infrastructure.controller.DTO.output.MerchantOutputDTO;
-import io.jsonwebtoken.Jwts;
-import io.jsonwebtoken.SignatureAlgorithm;
 import io.swagger.annotations.*;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
@@ -22,8 +22,6 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
-import java.util.Date;
-import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.stream.Collectors;
@@ -40,44 +38,56 @@ public class ClientController {
     private final ClientDeleteUseCase clientDeleteUseCase;
     private final ClientMappers clientMappers;
 
-    private static final String SECRET_KEY = "aFk7Tfz2dIceNqUyKQL++BUyKwaw4WEqBMX9Rj3djks=";
+    private final TokenService tokenService;
 
 
+    // TODO: Cambiar respuesta a JSON
     @PostMapping("/create")
     @ApiOperation(value = "Crear un nuevo cliente")
     @ApiResponses(value = {
             @ApiResponse(code = 201, message = "Cliente creado exitosamente", response = Map.class),
     })
 
-    public ResponseEntity<Map<String, Object>> addClient(
+    //public ResponseEntity<Map<String, Object>> addClient(
+    public GenericResponseEntity<FullClientOutputDTO> addClient(
             @ApiParam(value = "Datos del cliente a crear", required = true)
             @Valid @RequestBody ClientInputDTO clientInputDTO) {
 
         ClientGenericModel generic = clientMappers.inputToModel(clientInputDTO);
 
+
+        FullClientOutputDTO newClient = clientMappers.modelToFullOutput(clientAddUseCase.addClient(generic));
+        return new GenericResponseEntity<>(
+                "Client creado con éxito.",
+                String.valueOf(HttpStatus.NO_CONTENT.value()),
+                newClient
+        );
+
+        // Antes lo hacía así:
+        /*
         clientAddUseCase.addClient(generic);
 
-        // Tal como está siempre va a devolver el mismo mensaje, pero por agilizar la entrega lo dejo así
         Map<String, Object> response = new HashMap<>();
         response.put("message", "Cliente creado exitosamente");
 
         return ResponseEntity.status(HttpStatus.CREATED).body(response);
+        */
     }
 
 
     @GetMapping("/getByName/{name}")
     @ApiOperation(value = "Buscar clientes por nombre")
-    public List<ClientOutputDTO> getByName(
+    public List<FullClientOutputDTO> getByName(
             @ApiParam(value = "Nombre del cliente a buscar", required = true)
             @PathVariable String name) {
 
         List<ClientGenericModel> res = clientGetUseCase.getByName(name);
 
-        List<ClientOutputDTO> clientOutputDTOList = res.stream()
-                .map(clientMappers::modelToOutput)
+        List<FullClientOutputDTO> fullClientOutputDTOList = res.stream()
+                .map(clientMappers::modelToFullOutput)
                 .collect(Collectors.toList());
 
-        return clientOutputDTOList;
+        return fullClientOutputDTOList;
 
     }
 
@@ -90,7 +100,6 @@ public class ClientController {
 
         List<ClientGenericModel> res = clientGetUseCase.getByEmail(email);
 
-        // Transformación a DTO
         List<ClientOutputDTO> clientOutputDTOList = res.stream()
                 .map(clientMappers::modelToOutput)
                 .collect(Collectors.toList());
@@ -126,27 +135,51 @@ public class ClientController {
 
     }
 
-
     @PutMapping("update")
     @ApiOperation(value = "Actualizar cliente")
     @ApiResponses(value = {
             @ApiResponse(code = 201, message = "Cliente actualizado exitosamente", response = Map.class),
     })
-    public ResponseEntity<Map<String, Object>> update(
+    //public ResponseEntity<Map<String, Object>> update(
+    public GenericResponseEntity<FullClientOutputDTO> update(
             @ApiParam(value = "Datos del cliente a actualizar", required = true)
-            @RequestBody ClientUpdateRequestDTO clientUpdate) {
+            @Valid @RequestBody ClientUpdateRequestDTO clientUpdate) {
 
-        ClientGenericModel generic = clientMappers.updateToModel(clientUpdate);
-        clientUpdateUseCase.update(generic);
+        ClientGenericModel updatedClient = clientMappers.updateToModel(clientUpdate);
+        clientUpdateUseCase.update(updatedClient);
 
-        // Tal como está siempre va a devolver el mismo mensaje, pero por agilizar la entrega lo dejo así
+
+        return new GenericResponseEntity<>(
+                "Cliente actualizado con éxito.",
+                String.valueOf(HttpStatus.NO_CONTENT.value()),
+                clientMappers.modelToFullOutput(updatedClient)
+        );
+        /*
+        // TODO: Tal como está siempre va a devolver el mismo mensaje, pero por agilizar la entrega lo dejo así
         Map<String, Object> response = new HashMap<>();
         response.put("message", "Cliente actualizado exitosamente");
 
-        return ResponseEntity.status(HttpStatus.OK).body(response);
+        return ResponseEntity.status(HttpStatus.OK).body(response);*/
     }
 
-    // Devolver el objeto si existe y si no un 404
+
+    @GetMapping("merchantExists/{idMerchant}")
+    @ApiOperation(value = "Comprobar si un comercio existe")
+    public ResponseEntity<MerchantOutputDTO> merchantExists(
+            @ApiParam(value = "ID del comercio a comprobar", required = true)
+            @PathVariable String idMerchant) {
+
+        MerchantOutputDTO merchantOutputDTO = clientMappers.modelToMerchantDto(clientGetUseCase.merchantExists(idMerchant));
+
+        if (merchantOutputDTO != null) {
+            return ResponseEntity.ok(merchantOutputDTO);
+        } else {
+            return ResponseEntity.notFound().build();
+        }
+    }
+
+    // Versión antigua
+    /*
     @GetMapping("merchantExists/{idMerchant}")
     @ApiOperation(value = "Comprobar si un comercio existe")
     public MerchantOutputDTO merchantExists(
@@ -161,8 +194,11 @@ public class ClientController {
         return merchantOutputDTO;
     }
 
+    */
 
-    // Lo suyo sería que la lógica fuera en el servicio para dejar el EP lo más limpio posible
+
+    // TODO: (Consejo Dani) Lo suyo sería que la lógica fuera en el servicio para dejar el EP lo más limpio posible
+    // hecho
     @PostMapping("generateToken")
     @ApiOperation(value = "Generar un token JWT")
     public String generateToken(
@@ -171,32 +207,12 @@ public class ClientController {
             @ApiParam(value = "Edad del usuario", required = true)
             @RequestParam int age) {
 
-        Map<String, Object> claims = new HashMap<>();
-        claims.put("name", name);
-        claims.put("age", age);
-
-        return Jwts.builder()
-                .setClaims(claims)
-                .setIssuedAt(new Date())
-                .setExpiration(new Date(System.currentTimeMillis() + 1000 * 60 * 60 * 10))
-                .signWith(SignatureAlgorithm.HS256, SECRET_KEY)
-                .compact();
-
+        return tokenService.createToken(name, age);
     }
 
 
     @GetMapping("/getClients")
     @ApiOperation(value = "Obtener todos los clientes")
-    /*public List<ClientOutputDTO> getAllClients() {
-        List<ClientGenericModel> res = clientGetUseCase.getAllClients();
-
-        // Transformación a DTO
-        List<ClientOutputDTO> clientOutputDTOList = res.stream()
-                .map(clientMappers::modelToOutput)
-                .collect(Collectors.toList());
-
-        return clientOutputDTOList;
-    }*/
     public List<FullClientOutputDTO> getAllClients() {
         List<ClientGenericModel> res = clientGetUseCase.getAllClients();
 
@@ -208,17 +224,26 @@ public class ClientController {
         return clientOutputDTOList;
     }
 
-
-    // Devolver algo de feedback, ya sea con un booleano o una excepción
+    // TODO: (Consejo Raúl) Cambiar respuesta a JSON
+    // TODO: (Consejo Dani) Devolver algo de feedback, ya sea con un booleano o una excepción
     @DeleteMapping("deleteClient/{id}")
     @ApiOperation(value = "Eliminar un cliente")
-    public void deleteClient(
+    //public void deleteClient(
+    public GenericResponseEntity<FullClientOutputDTO> deleteClient(
             @ApiParam(value = "ID del cliente a buscar", required = true)
             @PathVariable String id
-    ){
-        clientDeleteUseCase.delete(id);
+    ) {
+
+        FullClientOutputDTO deletedClient = clientMappers.modelToFullOutput(clientDeleteUseCase.delete(id));
+
+        return new GenericResponseEntity<>(
+                "Cliente borrado con éxito.",
+                String.valueOf(HttpStatus.NO_CONTENT.value()),
+                deletedClient
+        );
 
     }
+
 
     @GetMapping("getMerchantsByClientId/{id}")
     @ApiOperation(value = "Obtener todos los merchants de un cliente")

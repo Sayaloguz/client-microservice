@@ -4,11 +4,8 @@ import com.amazonaws.services.dynamodbv2.datamodeling.DynamoDBMapper;
 import com.amazonaws.services.dynamodbv2.datamodeling.DynamoDBQueryExpression;
 import com.amazonaws.services.dynamodbv2.model.AttributeValue;
 import com.sarawipay.client_microservice.Client.application.ClientGenericModel;
-import com.sarawipay.client_microservice.Client.application.MerchantGenericModel;
 import com.sarawipay.client_microservice.Client.domain.Client;
 import com.sarawipay.client_microservice.Client.domain.mappers.ClientMappers;
-import com.sarawipay.client_microservice.Client.infrastructure.controller.DTO.input.ClientInputDTO;
-import com.sarawipay.client_microservice.Client.infrastructure.controller.DTO.output.ClientOutputDTO;
 import com.sarawipay.client_microservice.Client.infrastructure.repository.port.ClientRepository;
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;
@@ -27,132 +24,75 @@ public class ClientRepositoryImpl implements ClientRepository {
     private final DynamoDBMapper dynamoDBMapper;
     private final ClientMappers clientMappers;
 
-
     @Override
-    public void create(ClientGenericModel model) {
-
+    public ClientGenericModel create(ClientGenericModel model) {
         model.setName(model.getName().toLowerCase());
         Client client = clientMappers.modelToClient(model);
-
         dynamoDBMapper.save(client);
-
+        return clientMappers.clientToModel(client);
     }
-
 
     @Override
     public List<ClientGenericModel> findByName(String name) {
+        String lwrCaseName = name.toLowerCase();
 
-        String pkGsi = "gIndex2Pk"; // PK de GSI
-        String lwrCaseName = name.toLowerCase(); // Comparación en minúsculas
+        Map<String, String> attrNames = new HashMap<>();
+        attrNames.put("#nameAttr", "name"); // Solo para 'name' por ser palabra reservada
 
-        Map<String, String> expressionAttributeNames = new HashMap<>(); // Evita posibles conflictos con palabras reservadas
-        expressionAttributeNames.put("#pkAttr", pkGsi);
-        expressionAttributeNames.put("#nameAttr", "name");
-
-        Map<String, AttributeValue> expressionAtributeValues = new HashMap<>();
-        expressionAtributeValues.put(":pkVal", new AttributeValue().withS("entityClient")); // Solo buscamos clientes
-        expressionAtributeValues.put(":name", new AttributeValue().withS(lwrCaseName));
-
+        Map<String, AttributeValue> attrValues = new HashMap<>();
+        attrValues.put(":pkVal", new AttributeValue().withS("entityClient"));
+        attrValues.put(":name", new AttributeValue().withS(lwrCaseName));
 
         DynamoDBQueryExpression<Client> query = new DynamoDBQueryExpression<Client>()
                 .withIndexName("gIndex2Pk")
                 .withConsistentRead(false)
-                .withKeyConditionExpression("#pkAttr = :pkVal")
+                .withKeyConditionExpression("gIndex2Pk = :pkVal")
                 .withFilterExpression("contains(#nameAttr, :name)")
-                // Asignación de nombres y valores
-                .withExpressionAttributeNames(expressionAttributeNames)
-                .withExpressionAttributeValues(expressionAtributeValues);
+                .withExpressionAttributeNames(attrNames)
+                .withExpressionAttributeValues(attrValues);
 
-        List<Client> entities = dynamoDBMapper.query(Client.class, query);
-
-        List<ClientGenericModel> res = entities.stream()
-                .map(clientMappers::clientToModel)
-                .collect(Collectors.toList());
-
-        return res;
-
+        List<Client> results = dynamoDBMapper.query(Client.class, query);
+        return results.stream().map(clientMappers::clientToModel).collect(Collectors.toList());
     }
-
 
     @Override
     public List<ClientGenericModel> findByEmail(String email) {
-        // Vamos a suponer que pueden haber varios clientes con el mismo correo
-
-        String pkGsi = "gIndex2Pk"; // PK de GSI
-
-        Map<String, String> expressionAttributeNames = new HashMap<>();
-        expressionAttributeNames.put("#pkAttr", pkGsi);
-        // En este caso esto no sería necesario ya que no es una palabra reservada de dynamo
-        expressionAttributeNames.put("#emailAttr", "email");
-
-        Map<String, AttributeValue> expressionAtributeValues = new HashMap<>();
-        expressionAtributeValues.put(":pkVal", new AttributeValue().withS("entityClient")); // Solo buscamos clientes
-        expressionAtributeValues.put(":email", new AttributeValue().withS(email));
-
+        Map<String, AttributeValue> attrValues = new HashMap<>();
+        attrValues.put(":pkVal", new AttributeValue().withS("entityClient"));
+        attrValues.put(":email", new AttributeValue().withS(email));
 
         DynamoDBQueryExpression<Client> query = new DynamoDBQueryExpression<Client>()
                 .withIndexName("gIndex2Pk")
                 .withConsistentRead(false)
-                .withKeyConditionExpression("pkAttr = :pkVal")
-                .withFilterExpression("  = :email") //
-                // Asignación de nombres y valores
-                .withExpressionAttributeNames(expressionAttributeNames)
-                .withExpressionAttributeValues(expressionAtributeValues);
+                .withKeyConditionExpression("gIndex2Pk = :pkVal")
+                .withFilterExpression("email = :email")
+                .withExpressionAttributeValues(attrValues);
 
-
-        List<Client> entities = dynamoDBMapper.query(Client.class, query);
-
-        // Lo pasamos a modelo genérico
-        List<ClientGenericModel> res = entities.stream()
-                .map(clientMappers::clientToModel)
-                .collect(Collectors.toList());
-
-        return res;
-
+        List<Client> results = dynamoDBMapper.query(Client.class, query);
+        return results.stream().map(clientMappers::clientToModel).collect(Collectors.toList());
     }
-
 
     @Override
     public ClientGenericModel findById(String id) {
-        // REVISAR: Dado que el id es único, no necesitamos filtrar por el PK, pero quizás sería bueno hacerlo
-
-        String pkGsi = "gIndex2Pk"; // PK de GSI
-
-        Map<String, String> expressionAttributeNames = new HashMap<>();
-        expressionAttributeNames.put("#pkAttr", pkGsi);
-        expressionAttributeNames.put("#idAttr", "id");
-
-        Map<String, AttributeValue> expressionAtributeValues = new HashMap<>();
-        expressionAtributeValues.put(":pkVal", new AttributeValue().withS("entityClient")); // Solo buscamos clientes
-        expressionAtributeValues.put(":id", new AttributeValue().withS(id));
-
+        Map<String, AttributeValue> attrValues = new HashMap<>();
+        attrValues.put(":pkVal", new AttributeValue().withS("entityClient"));
+        attrValues.put(":id", new AttributeValue().withS(id));
 
         DynamoDBQueryExpression<Client> query = new DynamoDBQueryExpression<Client>()
                 .withIndexName("gIndex2Pk")
                 .withConsistentRead(false)
-                .withKeyConditionExpression("#pkAttr = :pkVal")
-                .withFilterExpression("#idAttr = :id")
-                // Asignación de nombres y valores
-                .withExpressionAttributeNames(expressionAttributeNames)
-                .withExpressionAttributeValues(expressionAtributeValues);
+                .withKeyConditionExpression("gIndex2Pk = :pkVal")
+                .withFilterExpression("id = :id")
+                .withExpressionAttributeValues(attrValues);
 
-        List<Client> res = dynamoDBMapper.query(Client.class, query);
-
-        if (res.isEmpty()) {
-            return null;
-        }
-
-        return clientMappers.clientToModel(res.get(0));
-
+        List<Client> results = dynamoDBMapper.query(Client.class, query);
+        return results.isEmpty() ? null : clientMappers.clientToModel(results.get(0));
     }
 
-
     @Override
-    public void update(ClientGenericModel generic) {
-
+    public ClientGenericModel update(ClientGenericModel generic) {
         Client existingClient = clientMappers.modelToClient(this.findById(generic.getId()));
 
-        // Client existingClient = dynamoDBMapper.load(Client.class, generic.getPk(), generic.getSk());
         if (existingClient != null) {
             existingClient.setCifNifNie(generic.getCifNifNie());
             existingClient.setName(generic.getName().toLowerCase());
@@ -163,70 +103,44 @@ public class ClientRepositoryImpl implements ClientRepository {
             dynamoDBMapper.save(existingClient);
         }
 
+        return clientMappers.clientToModel(existingClient);
     }
-
-
 
     @Override
     public List<ClientGenericModel> findAllClients() {
-
-        String pkGsi = "gIndex2Pk"; // PK de GSI
-
-        Map<String, String> expressionAttributeNames = new HashMap<>();
-        expressionAttributeNames.put("#pkAttr", pkGsi);
-
-        Map<String, AttributeValue> expressionAtributeValues = new HashMap<>();
-        expressionAtributeValues.put(":pkVal", new AttributeValue().withS("entityClient")); // Solo buscamos clientes
+        Map<String, AttributeValue> attrValues = new HashMap<>();
+        attrValues.put(":pkVal", new AttributeValue().withS("entityClient"));
 
         DynamoDBQueryExpression<Client> query = new DynamoDBQueryExpression<Client>()
                 .withIndexName("gIndex2Pk")
                 .withConsistentRead(false)
-                .withKeyConditionExpression("#pkAttr = :pkVal")
-                // Asignación de nombres y valores
-                .withExpressionAttributeNames(expressionAttributeNames)
-                .withExpressionAttributeValues(expressionAtributeValues);
+                .withKeyConditionExpression("gIndex2Pk = :pkVal")
+                .withExpressionAttributeValues(attrValues);
 
-        List<Client> entities = dynamoDBMapper.query(Client.class, query);
-
-        // Lo pasamos a modelo genérico
-
-        List<ClientGenericModel> res = entities.stream()
-                .map(clientMappers::clientToModel)
-                .collect(Collectors.toList());
-
-        return res;
+        List<Client> results = dynamoDBMapper.query(Client.class, query);
+        return results.stream().map(clientMappers::clientToModel).collect(Collectors.toList());
     }
 
     @Override
-    public void delete(String id) {
-
-        String pkGsi = "gIndex2Pk"; // PK de GSI
-
-        Map<String, String> expressionAttributeNames = new HashMap<>();
-        expressionAttributeNames.put("#pkAttr", pkGsi);
-        expressionAttributeNames.put("#idAttr", "id");
-
-        Map<String, AttributeValue> expressionAtributeValues = new HashMap<>();
-        expressionAtributeValues.put(":pkVal", new AttributeValue().withS("entityClient")); // Solo buscamos clientes
-        expressionAtributeValues.put(":id", new AttributeValue().withS(id));
-
+    public ClientGenericModel delete(String id) {
+        Map<String, AttributeValue> attrValues = new HashMap<>();
+        attrValues.put(":pkVal", new AttributeValue().withS("entityClient"));
+        attrValues.put(":id", new AttributeValue().withS(id));
 
         DynamoDBQueryExpression<Client> query = new DynamoDBQueryExpression<Client>()
                 .withIndexName("gIndex2Pk")
                 .withConsistentRead(false)
-                .withKeyConditionExpression("#pkAttr = :pkVal")
-                .withFilterExpression("#idAttr = :id")
-                // Asignación de nombres y valores
-                .withExpressionAttributeNames(expressionAttributeNames)
-                .withExpressionAttributeValues(expressionAtributeValues);
+                .withKeyConditionExpression("gIndex2Pk = :pkVal")
+                .withFilterExpression("id = :id")
+                .withExpressionAttributeValues(attrValues);
 
-        List<Client> res = dynamoDBMapper.query(Client.class, query);
+        List<Client> results = dynamoDBMapper.query(Client.class, query);
+        if (results.isEmpty()) {
+            return null;
+        }
 
-        Client client = res.get(0);
-
+        Client client = results.get(0);
         dynamoDBMapper.delete(client);
-
+        return clientMappers.clientToModel(client);
     }
-
-
 }

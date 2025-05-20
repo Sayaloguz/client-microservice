@@ -20,9 +20,9 @@ public class MerchantResponseDTO {
 
     private String merchantType;
 
-    // Necesitamos este setter para formatear el nombre
+    // TODO: (Consejo César) Crear un atributo de Merchant para tener el nombre para búsqueda (todo minúsculas) y el nombre para mostrar
+    // TODO: Hacer esto en los mapper en caso de no crear un segundo atributo
     public void setName(String name) {
-
         this.name = firstLetterToUpperCase(name);
     }
 

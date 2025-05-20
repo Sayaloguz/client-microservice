@@ -4,6 +4,6 @@ import com.sarawipay.client_microservice.Client.application.ClientGenericModel;
 
 public interface ClientUpdateUseCase {
 
-    void update(ClientGenericModel generic);
+    ClientGenericModel update(ClientGenericModel generic);
 
 }

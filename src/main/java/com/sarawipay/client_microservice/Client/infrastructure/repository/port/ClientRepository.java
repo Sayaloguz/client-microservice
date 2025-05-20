@@ -9,7 +9,7 @@ import java.util.List;
 @Repository
 public interface ClientRepository {
 
-    void create(ClientGenericModel clientGenericModel);
+    ClientGenericModel create(ClientGenericModel clientGenericModel);
 
     ClientGenericModel findById(String id);
 
@@ -17,13 +17,13 @@ public interface ClientRepository {
 
     List<ClientGenericModel> findByEmail(String email);
 
-    void update(ClientGenericModel clientGenericModel);
+    ClientGenericModel update(ClientGenericModel clientGenericModel);
 
     List<ClientGenericModel> findAllClients();
 
-    void delete(String idClient);
+    ClientGenericModel delete(String idClient);
 
 
 }
 
-// Nota: Los tres métodos "findBy" son muy parecidos entre ellos, una posible mejora sería hacer una función genérica para los tres
+// TODO: (Consejo Guille) Los tres métodos "findBy" son muy parecidos entre ellos, una posible mejora sería hacer una función genérica para los tres
